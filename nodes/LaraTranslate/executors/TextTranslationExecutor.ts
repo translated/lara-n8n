@@ -48,7 +48,7 @@ export async function executeTextTranslation(
 		return context.helpers.constructExecutionMetaData(
 			[
 				{
-					json: {...response},
+					json: { ...response },
 				},
 			],
 			{ itemData: { item: itemIndex } },

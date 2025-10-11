@@ -72,7 +72,7 @@ export async function executeDocumentTranslation(
 		return context.helpers.constructExecutionMetaData(
 			[
 				{
-					json: {...response},
+					json: { ...response },
 					binary: response.translationBinary,
 				},
 			],
