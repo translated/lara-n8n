@@ -1,0 +1,338 @@
+import { SupportedFileFormat } from '../types/types';
+
+const supportedLanguages: string[] = [
+	// T1
+	'de-DE',
+	'en-US',
+	'es-ES',
+	'fr-FR',
+	'it-IT',
+	'ja-JP',
+	'ko-KR',
+	'pt-BR',
+	'ru-RU',
+	'zh-CN',
+	'zh-TW',
+
+	// T2
+	'ar-SA',
+	'bg-BG',
+	'ca-ES',
+	'hr-HR',
+	'cs-CZ',
+	'da-DK',
+	'nl-NL',
+	'fi-FI',
+	'el-GR',
+	'he-IL',
+	'hu-HU',
+	'id-ID',
+	'ms-MY',
+	'nb-NO',
+	'pl-PL',
+	'sk-SK',
+	'sv-SE',
+	'th-TH',
+	'tr-TR',
+	'uk-UA',
+
+	// locales
+	'en-AU',
+	'en-GB',
+	'en-CA',
+	'en-IE',
+	'es-419',
+	'es-MX',
+	'es-AR',
+	'fr-CA',
+	'pt-PT',
+	'zh-HK',
+	'nl-BE',
+];
+
+export const supportedLanguageSet = new Set(supportedLanguages);
+
+export const languageMapping: Record<string, string> = {
+	'ar-SA': 'Arabic',
+	'bg-BG': 'Bulgarian (Bulgaria)',
+	'ca-ES': 'Catalan (Spain)',
+	'zh-CN': 'Chinese Simplified (Mainland)',
+	'zh-TW': 'Chinese Traditional (Taiwan)',
+	'zh-HK': 'Chinese Traditional (Hong Kong)',
+	'hr-HR': 'Croatian (Croatia)',
+	'cs-CZ': 'Czech (Czech Republic)',
+	'da-DK': 'Danish (Denmark)',
+	'nl-BE': 'Dutch (Belgium)',
+	'nl-NL': 'Dutch (Netherlands)',
+	'en-AU': 'English (Australia)',
+	'en-CA': 'English (Canada)',
+	'en-IE': 'English (Ireland)',
+	'en-GB': 'English (United Kingdom)',
+	'en-US': 'English (USA)',
+	'fi-FI': 'Finnish (Finland)',
+	'fr-CA': 'French (Canada)',
+	'fr-FR': 'French (France)',
+	'de-DE': 'German (Germany)',
+	'el-GR': 'Greek (Greece)',
+	'he-IL': 'Hebrew (Israel)',
+	'hu-HU': 'Hungarian (Hungary)',
+	'id-ID': 'Indonesian (Indonesia)',
+	'it-IT': 'Italian (Italy)',
+	'ja-JP': 'Japanese (Japan)',
+	'ko-KR': 'Korean (Korea)',
+	'ms-MY': 'Malay (Malaysia)',
+	'nb-NO': 'Norwegian Bokmål (Norway)',
+	'pl-PL': 'Polish (Poland)',
+	'pt-BR': 'Portuguese (Brazil)',
+	'pt-PT': 'Portuguese (Portugal)',
+	'ru-RU': 'Russian (Russia)',
+	'sk-SK': 'Slovak (Slovakia)',
+	'es-AR': 'Spanish (Argentina)',
+	'es-419': 'Spanish (Latin America)',
+	'es-MX': 'Spanish (Mexico)',
+	'es-ES': 'Spanish (Spain)',
+	'sv-SE': 'Swedish (Sweden)',
+	'th-TH': 'Thai (Thailand)',
+	'tr-TR': 'Turkish (Turkey)',
+	'uk-UA': 'Ukrainian (Ukraine)',
+};
+
+const supportedFileFormats: SupportedFileFormat[] = [
+	{
+		name: 'Adobe InCopy (ICML)',
+		extensions: ['icml'],
+		description: 'Adobe InCopy ICML format',
+	},
+	{
+		name: 'Adobe InDesign (IDML)',
+		extensions: ['idml'],
+		description: 'Adobe InDesign IDML format',
+	},
+	{
+		name: 'Apple Strings',
+		extensions: ['strings'],
+		description: 'Apple localization strings format',
+	},
+	{
+		name: 'Comma Separated Values (CSV)',
+		extensions: ['csv'],
+		description: 'CSV file format',
+	},
+	{
+		name: 'Darwin Information Typing Architecture (DITA)',
+		extensions: ['dita'],
+		description: 'DITA XML format',
+	},
+	{
+		name: 'FrameMaker MIF',
+		extensions: ['mif'],
+		description: 'FrameMaker MIF format',
+	},
+	{
+		name: 'Gettext PO',
+		extensions: ['po'],
+		description: 'Gettext Portable Object format',
+	},
+	{
+		name: 'HTML',
+		extensions: ['htm', 'html', 'xhtml'],
+		description: 'HTML and XHTML formats',
+	},
+	{
+		name: 'JSON',
+		extensions: ['json'],
+		description: 'JSON file format',
+	},
+	{
+		name: 'Markdown',
+		extensions: ['md', 'markdown'],
+		description: 'Markdown format',
+	},
+	{
+		name: 'Microsoft Excel (XLSX)',
+		extensions: ['xlsx'],
+		description: 'Microsoft Excel format',
+	},
+	{
+		name: 'Excel Macro-Enabled Workbook (XLSM)',
+		extensions: ['xlsm'],
+		description: 'Excel workbook with macros',
+	},
+	{
+		name: 'Excel Template (XLTX)',
+		extensions: ['xltx'],
+		description: 'Excel template format',
+	},
+	{
+		name: 'Excel Macro-Enabled Template (XLTM)',
+		extensions: ['xltm'],
+		description: 'Excel template with macros',
+	},
+	{
+		name: 'LaTeX',
+		extensions: ['tex'],
+		description: 'LaTeX document format',
+	},
+	{
+		name: 'Microsoft PowerPoint (PPTX)',
+		extensions: ['pptx'],
+		description: 'PowerPoint presentation format',
+	},
+	{
+		name: 'PowerPoint Macro-Enabled (PPTM)',
+		extensions: ['pptm'],
+		description: 'PowerPoint with macros',
+	},
+	{
+		name: 'PowerPoint Presentation (PPSX)',
+		extensions: ['ppsx'],
+		description: 'PowerPoint slideshow format',
+	},
+	{
+		name: 'PowerPoint Macro-Enabled Presentation (PPSM)',
+		extensions: ['ppsm'],
+		description: 'PowerPoint slideshow with macros',
+	},
+	{
+		name: 'PowerPoint Template (POTX)',
+		extensions: ['potx'],
+		description: 'PowerPoint template format',
+	},
+	{
+		name: 'PowerPoint Macro-Enabled Template (POTM)',
+		extensions: ['potm'],
+		description: 'PowerPoint template with macros',
+	},
+	{
+		name: 'Microsoft RESX',
+		extensions: ['resx'],
+		description: 'Microsoft .NET resource format',
+	},
+	{
+		name: 'Microsoft Word (DOCX)',
+		extensions: ['docx'],
+		description: 'Microsoft Word document format',
+	},
+	{
+		name: 'Word Macro-Enabled Document (DOCM)',
+		extensions: ['docm'],
+		description: 'Word document with macros',
+	},
+	{
+		name: 'Word Template (DOTX)',
+		extensions: ['dotx'],
+		description: 'Word template format',
+	},
+	{
+		name: 'Word Macro-Enabled Template (DOTM)',
+		extensions: ['dotm'],
+		description: 'Word template with macros',
+	},
+	{
+		name: 'OpenDocument Presentation (ODP)',
+		extensions: ['odp'],
+		description: 'OpenDocument presentation format',
+	},
+	{
+		name: 'OpenDocument Presentation Template (OTP)',
+		extensions: ['otp'],
+		description: 'OpenDocument presentation template',
+	},
+	{
+		name: 'OpenDocument Spreadsheet (ODS)',
+		extensions: ['ods'],
+		description: 'OpenDocument spreadsheet format',
+	},
+	{
+		name: 'OpenDocument Spreadsheet Template (OTS)',
+		extensions: ['ots'],
+		description: 'OpenDocument spreadsheet template',
+	},
+	{
+		name: 'OpenDocument Text (ODT)',
+		extensions: ['odt'],
+		description: 'OpenDocument text format',
+	},
+	{
+		name: 'OpenDocument Text Template (OTT)',
+		extensions: ['ott'],
+		description: 'OpenDocument text template',
+	},
+	{
+		name: 'PHP',
+		extensions: ['php'],
+		description: 'PHP source code format',
+	},
+	{
+		name: 'Plain Text',
+		extensions: ['txt'],
+		description: 'Plain text format',
+	},
+	{
+		name: 'Portable Document Format (PDF)',
+		extensions: ['pdf'],
+		description: 'PDF document format',
+	},
+	{
+		name: 'Properties',
+		extensions: ['properties'],
+		description: 'Java properties file format',
+	},
+	{
+		name: 'SDL Trados TXML',
+		extensions: ['txml'],
+		description: 'SDL Trados TXML format',
+	},
+	{
+		name: 'SubRip Subtitles (SRT)',
+		extensions: ['srt'],
+		description: 'SubRip subtitle format',
+	},
+	{
+		name: 'Tab Separated Values (TSV)',
+		extensions: ['tsv'],
+		description: 'Tab-separated values format',
+	},
+	{
+		name: 'TRADOS TTX',
+		extensions: ['ttx'],
+		description: 'TRADOS TTX format',
+	},
+	{
+		name: 'TypeScript',
+		extensions: ['ts'],
+		description: 'TypeScript source code format',
+	},
+	{
+		name: 'WebVTT Subtitle',
+		extensions: ['vtt'],
+		description: 'WebVTT subtitle format',
+	},
+	{
+		name: 'WIX Localization',
+		extensions: ['wix'],
+		description: 'WIX localization format',
+	},
+	{
+		name: 'XINI',
+		extensions: ['xini'],
+		description: 'XINI format',
+	},
+	{
+		name: 'XLIFF',
+		extensions: ['xlf', 'xliff'],
+		description: 'XML Localization Interchange File Format',
+	},
+	{
+		name: 'XML',
+		extensions: ['xml', 'dtd'],
+		description: 'XML and DTD formats',
+	},
+	{
+		name: 'YAML',
+		extensions: ['yaml'],
+		description: 'YAML format',
+	},
+];
+
+export const supportedExtensionsSet = new Set(supportedFileFormats.flatMap((f) => f.extensions));
