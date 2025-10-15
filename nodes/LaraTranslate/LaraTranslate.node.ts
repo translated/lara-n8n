@@ -156,13 +156,25 @@ export class LaraTranslate implements INodeType {
 		// Validate resource and operation (same for all items)
 		const resource = this.getNodeParameter('resource', 0);
 		if (!resource || resource !== 'translation') {
-			throw new Error(`Resource is required and must be 'translation'`);
+			throw new NodeOperationError(
+				this.getNode(),
+				new Error(`Resource is required and must be 'translation'`),
+				{
+					itemIndex: 0,
+				},
+			);
 		}
 
 		const operation = this.getNodeParameter('operation', 0) as string;
 		if (!operation || (operation !== 'translateText' && operation !== 'translateDocument')) {
-			throw new Error(
-				`Operation is required and must be either 'translateText' or 'translateDocument'`,
+			throw new NodeOperationError(
+				this.getNode(),
+				new Error(
+					`Operation is required and must be either 'translateText' or 'translateDocument'`,
+				),
+				{
+					itemIndex: 0,
+				},
 			);
 		}
 

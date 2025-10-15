@@ -120,6 +120,7 @@ export const genericAdvancedOptions: INodeProperties = {
 				'Select translation memories to adapt to. Choose from the list, or specify IDs using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 			placeholder: 'Select memories',
 		},
+		// eslint-disable-next-line n8n-nodes-base/node-param-default-missing
 		{
 			displayName: 'Translation Style',
 			name: 'style',
@@ -181,6 +182,7 @@ export const translateTextFields: INodeProperties[] = [
 			},
 		},
 		options: [
+			// eslint-disable-next-line n8n-nodes-base/node-param-default-missing
 			{
 				displayName: 'Cache TTL (Seconds)',
 				name: 'cacheTtl',
@@ -197,6 +199,7 @@ export const translateTextFields: INodeProperties[] = [
 					minValue: LARA_CONFIG.MIN_CACHE_TTL,
 				},
 			},
+			// eslint-disable-next-line n8n-nodes-base/node-param-default-missing
 			{
 				displayName: 'Content Type',
 				name: 'contentType',
@@ -226,6 +229,7 @@ export const translateTextFields: INodeProperties[] = [
 				description:
 					"Instructions are directives that guide Lara's translation process. They can specify formality, tone, or domain-specific terminology, allowing for precise adjustments to match your needs. Lara supports any instruction written in natural language, like instructions about formality, tone and specific terminology",
 			},
+			// eslint-disable-next-line n8n-nodes-base/node-param-default-missing
 			{
 				displayName: 'Timeout (Milliseconds)',
 				name: 'timeoutMs',
@@ -237,6 +241,7 @@ export const translateTextFields: INodeProperties[] = [
 					maxValue: LARA_CONFIG.MAX_TIMEOUT_MS,
 				},
 			},
+			// eslint-disable-next-line n8n-nodes-base/node-param-default-missing
 			{
 				displayName: 'Use Cache',
 				name: 'useCache',
@@ -291,6 +296,7 @@ export const translateDocumentFields: INodeProperties[] = [
 		description:
 			'The path to the document you want to translate. Example: "./example/document.pdf".',
 	},
+	// eslint-disable-next-line n8n-nodes-base/node-param-default-missing
 	{
 		displayName: 'Input Binary Field',
 		name: 'binaryPropertyName',
@@ -336,6 +342,7 @@ export const translateDocumentFields: INodeProperties[] = [
 			},
 		},
 		options: [
+			// eslint-disable-next-line n8n-nodes-base/node-param-default-missing
 			{
 				displayName: 'Output Format',
 				name: 'outputFormat',
