@@ -16,7 +16,6 @@ import { getFileExtension, getFileNameWithoutExtension, convertToBinaryData } fr
  */
 class LaraTranslateServices {
 	private static translatorCache = new TranslatorCache();
-	private static supportedLanguagesCache: Set<string> | null = null;
 
 	/**
 	 * Retrieves or creates a cached Translator instance
@@ -29,27 +28,11 @@ class LaraTranslateServices {
 
 	/**
 	 * Retrieves the list of supported languages
-	 * @param lara - Optional Translator instance to fetch from API
+	 * Uses only the hardcoded languages from constants.ts
 	 * @returns Array of language options with name, value, and description
 	 */
-	static async getSupportedLanguages(
-		lara?: Translator,
-	): Promise<{ name: string; value: string; description?: string }[]> {
-		if (!this.supportedLanguagesCache) {
-			if (lara) {
-				try {
-					const languages = await lara.getLanguages();
-					this.supportedLanguagesCache = new Set(languages);
-				} catch (error) {
-					console.error('[LaraTranslate Service] Failed to fetch languages from API:', error);
-					this.supportedLanguagesCache = supportedLanguageSet;
-				}
-			} else {
-				this.supportedLanguagesCache = supportedLanguageSet;
-			}
-		}
-
-		return Array.from(this.supportedLanguagesCache).map((language) => ({
+	static getSupportedLanguages(): Array<{ name: string; value: string; description?: string }> {
+		return Array.from(supportedLanguageSet).map((language) => ({
 			name: languageMapping[language],
 			value: language,
 			description: `${languageMapping[language]} (${language})`,
@@ -62,8 +45,7 @@ class LaraTranslateServices {
 	 * @returns True if supported
 	 */
 	static isSupportedLanguage(language: string): boolean {
-		const supportedLanguages = this.supportedLanguagesCache || supportedLanguageSet;
-		return supportedLanguages.has(language);
+		return supportedLanguageSet.has(language);
 	}
 
 	/**

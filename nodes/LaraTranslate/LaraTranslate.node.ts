@@ -105,47 +105,6 @@ export class LaraTranslate implements INodeType {
 					];
 				}
 			},
-
-			async getLanguages(this: ILoadOptionsFunctions) {
-				try {
-					const credentials = await this.getCredentials('laraTranslateApi');
-					const lara = LaraTranslateServices.getOrCreateTranslator(credentials);
-					const langs = await LaraTranslateServices.getSupportedLanguages(lara);
-					return langs;
-				} catch (error) {
-					console.error('[LaraTranslate] Failed to load languages:', error);
-					return [
-						{
-							name: 'Error Loading Languages - Check Credentials',
-							value: '',
-						},
-					];
-				}
-			},
-
-			async getLanguagesWithAuto(this: ILoadOptionsFunctions) {
-				try {
-					const credentials = await this.getCredentials('laraTranslateApi');
-					const lara = LaraTranslateServices.getOrCreateTranslator(credentials);
-					const langs = await LaraTranslateServices.getSupportedLanguages(lara);
-					return [
-						{
-							name: 'Autodetect',
-							value: '',
-							description: 'Autodetect the source language (default option)',
-						},
-						...langs,
-					];
-				} catch (error) {
-					console.error('[LaraTranslate] Failed to load languages with autodetect:', error);
-					return [
-						{
-							name: 'Error Loading Languages - Check Credentials',
-							value: '',
-						},
-					];
-				}
-			},
 		},
 	};
 
