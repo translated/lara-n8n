@@ -108,9 +108,7 @@ export class LaraTranslate implements INodeType {
 
 			async getLanguages(this: ILoadOptionsFunctions) {
 				try {
-					const credentials = await this.getCredentials('laraTranslateApi');
-					const lara = LaraTranslateServices.getOrCreateTranslator(credentials);
-					const langs = await LaraTranslateServices.getSupportedLanguages(lara);
+					const langs = await LaraTranslateServices.getSupportedLanguages();
 					return langs;
 				} catch (error) {
 					console.error('[LaraTranslate] Failed to load languages:', error);
@@ -125,9 +123,7 @@ export class LaraTranslate implements INodeType {
 
 			async getLanguagesWithAuto(this: ILoadOptionsFunctions) {
 				try {
-					const credentials = await this.getCredentials('laraTranslateApi');
-					const lara = LaraTranslateServices.getOrCreateTranslator(credentials);
-					const langs = await LaraTranslateServices.getSupportedLanguages(lara);
+					const langs = await LaraTranslateServices.getSupportedLanguages();
 					return [
 						{
 							name: 'Autodetect',
