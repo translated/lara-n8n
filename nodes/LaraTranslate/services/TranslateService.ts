@@ -31,9 +31,7 @@ class LaraTranslateServices {
 	 * Uses only the hardcoded languages from constants.ts
 	 * @returns Array of language options with name, value, and description
 	 */
-	static async getSupportedLanguages(): Promise<
-		{ name: string; value: string; description?: string }[]
-	> {
+	static getSupportedLanguages(): Array<{ name: string; value: string; description?: string }> {
 		return Array.from(supportedLanguageSet).map((language) => ({
 			name: languageMapping[language],
 			value: language,

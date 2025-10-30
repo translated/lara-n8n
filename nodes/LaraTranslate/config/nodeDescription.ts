@@ -1,5 +1,6 @@
 import { INodeProperties } from 'n8n-workflow';
 import { LARA_CONFIG, LARA_DEFAULTS } from './config';
+import LaraTranslateServices from '../services/TranslateService';
 
 export const translateOperations: INodeProperties[] = [
 	{
@@ -35,15 +36,13 @@ export const translateFields: INodeProperties[] = [
 		displayName: 'Source Language Name or ID',
 		name: 'source',
 		type: 'options',
-		typeOptions: {
-			loadOptionsMethod: 'getLanguagesWithAuto',
-		},
 		options: [
 			{
 				name: 'Autodetect',
 				value: '',
 				description: 'Autodetect the source language (default option)',
 			},
+			...LaraTranslateServices.getSupportedLanguages(),
 		],
 		default: '',
 		displayOptions: {
@@ -67,9 +66,7 @@ export const translateFields: INodeProperties[] = [
 				operation: ['translateText', 'translateDocument'],
 			},
 		},
-		typeOptions: {
-			loadOptionsMethod: 'getLanguages',
-		},
+		options: LaraTranslateServices.getSupportedLanguages(),
 		description:
 			'Target language code (e.g., "en" for English, "it" for Italian). Choose from the list, or specify an ID using an <a href="https://docs.n8n.io/code/expressions/">expression</a>.',
 	},
