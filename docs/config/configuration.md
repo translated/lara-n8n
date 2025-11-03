@@ -1,3 +1,8 @@
+---
+title: Configuration
+sidebar_position: 2
+---
+
 # Configuration
 
 This guide covers how to configure the Lara Translate node in your n8n workflows, including credential setup and basic node configuration.
@@ -64,5 +69,5 @@ Choose the type of translation:
 
 Depending on your chosen operation, additional fields will appear:
 
-- [Translate Text](operations/translate-text.md)
-- [Translate Document](operations/translate-document.md)
+- [Translate Text](translate-text.md)
+- [Translate Document](translate-document.md)

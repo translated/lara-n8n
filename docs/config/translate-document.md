@@ -1,3 +1,8 @@
+---
+title: Translate Document
+sidebar_position: 4
+---
+
 # Translate Document
 
 ## Translate Method
@@ -25,9 +30,9 @@ The SDK contains a translate method that simplifies the process of translating d
 - **noTrace** - No trace option (Incognito mode)
 - **style** - Translation style preference (faithful, fluid, creative)
 
-For more details on supported languages ​​see [supported-languages.md](../supported-languages.md)
+For more details on supported languages ​​see [supported-languages.md](supported-languages.md)
 
-For more details on supported formats ​​see [supported-formats.md](../supported-formats.md)
+For more details on supported formats ​​see [supported-formats.md](supported-formats.md)
 
 For more information about these fields, refer to the [official documentation](https://developers.laratranslate.com/docs/translate-document).
 

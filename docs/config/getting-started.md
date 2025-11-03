@@ -1,3 +1,8 @@
+---
+title: Getting Started
+sidebar_position: 1
+---
+
 # Getting Started
 
 This guide will help you install and set up the Lara Translate node for n8n.
@@ -33,7 +38,7 @@ Before you begin, ensure you have the following:
    Click the **Install** button. The node will be installed for your entire instance and available to all team members
 
 5. **Start using it**  
-   Add the Lara Translate node to your workflows and [configure Lara for n8n](docs/configuration.md)
+   Add the Lara Translate node to your workflows and [configure Lara for n8n](configuration.md)
 
 > **💡 Tip:** For detailed installation instructions and troubleshooting, see the official [n8n community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/)
 
@@ -132,5 +137,5 @@ n8n start
 Now that you have the node installed, you're ready to:
 
 1. **[Configure Lara N8N in your workflow](configuration.md)** - Set up authentication
-2. **[Translate text](operations/translate-text.md)** - Learn text translation
-3. **[Translate documents](operations/translate-document.md)** - Learn document translation
+2. **[Translate text](translate-text.md)** - Learn text translation
+3. **[Translate documents](translate-document.md)** - Learn document translation

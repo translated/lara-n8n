@@ -61,7 +61,7 @@ pnpm link n8n-nodes-lara-translate
 n8n start
 ```
 
-> **📖 For detailed setup instructions, see [Getting Started](docs/getting-started.md)**
+> **📖 For detailed setup instructions, see [Getting Started](docs/config/getting-started.md)**
 
 ## Quick Start
 
@@ -73,9 +73,9 @@ Before using the node, you need to configure your Lara Translate API credentials
 2. Click on **Credentials** and create new credentials
 3. Enter your **Access Key ID** and **Access Key Secret**
 
-💡 **Don't have API keys?** For details on creating API keys, see [Api Credential Guide](docs/api-credentials.md)
+💡 **Don't have API keys?** For details on creating API keys, see [Api Credential Guide](docs/config/api-credentials.md)
 
-> **📖 For detailed configuration, see [Configuration Guide](docs/configuration.md)**
+> **📖 For detailed configuration, see [Configuration Guide](docs/config/configuration.md)**
 
 ### 2. Choose Your Operation
 
@@ -84,33 +84,35 @@ The node supports two main operations:
 #### Translate Text
 Translate plain text or XLIFF content with full control over style, caching, and advanced options.
 
-> **📖 Learn more: [Text Translation Guide](docs/operations/translate-text.md)**
+> **📖 Learn more: [Text Translation Guide](docs/config/translate-text.md)**
 
 #### Translate Document
 Translate documents in various formats (PDF, DOCX, PPTX, XLSX, etc.) while preserving formatting.
 
-> **📖 Learn more: [Document Translation Guide](docs/operations/translate-document.md)**
+> **📖 Learn more: [Document Translation Guide](docs/config/translate-document.md)**
 
 ## Documentation
 
-### Getting Started
-- [Installation & Setup](docs/getting-started.md) - Requirements and installation instructions
-- [Configuration](docs/configuration.md) - API credentials and node configuration
+### 📖 Documentation Flow
 
-### Operations
-- [Translate Text](docs/operations/translate-text.md) - Text translation with examples
-- [Translate Document](docs/operations/translate-document.md) - Document translation workflow
+Follow this recommended reading path:
 
-### Reference
-- [Supported Languages](docs/supported-languages.md) - Full list of supported languages
-- [Supported File Formats](docs/supported-formats.md) - Document formats and specifications
+1. **[Getting Started](docs/config/getting-started.md)** → Install the node (locally or via n8n)
+2. **[Configuration](docs/config/configuration.md)** → Set up API credentials and basic settings
+3. **Choose your operation:**
+   - **[Translate Text](docs/config/translate-text.md)** → For text content translation
+   - **[Translate Document](docs/config/translate-document.md)** → For document translation
+
+**Reference Guides:**
+- [API Credentials Setup](docs/config/api-credentials.md) - Detailed guide for obtaining API keys
+- [Supported Languages](docs/config/supported-languages.md) - 150+ supported languages
+- [Supported File Formats](docs/config/supported-formats.md) - Document format specifications
 
 ## Resources
 
 - [Lara](https://laratranslate.com)
 - [Lara API Documentation](https://developers.laratranslate.com)
 - [n8n Community Nodes](https://docs.n8n.io/integrations/community-nodes/)
-
 
 <div align="center">
 
