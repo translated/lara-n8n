@@ -42,7 +42,7 @@ Once you're logged in:
 
 From the dropdown menu that opened:
 
-1. Find and click on the **"API Credentials"** option (or "Credenziali API")
+1. Find and click on the **"API Credentials"** option
 2. You'll be redirected to the API keys management page
 
 ### 5. Create a New API Key

@@ -119,8 +119,6 @@ n8n start
 When making changes to the source code:
 
 ```bash
-pnpm dev
-
 pnpm build
 ```
 

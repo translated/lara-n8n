@@ -73,7 +73,7 @@ Before using the node, you need to configure your Lara Translate API credentials
 2. Click on **Credentials** and create new credentials
 3. Enter your **Access Key ID** and **Access Key Secret**
 
-💡 **Don't have API keys?** For details on creating API keys, see [Api Credential Guide](docs/config/api-credentials.md)
+💡 **Don't have API keys?** For details on creating API keys, see [API Credentials Guide](docs/config/api-credentials.md)
 
 > **📖 For detailed configuration, see [Configuration Guide](docs/config/configuration.md)**
 
