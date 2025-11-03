@@ -12,11 +12,32 @@ Before you begin, ensure you have the following:
 - **nvm** (optional) - Node version manager for easy Node.js version switching
 - **Lara Translate API credentials** (Access Key ID and Access Key Secret)
 
-💡 **Don't have API keys?** For details on creating API keys, see [Api Credential Guide](docs/api-credentials.md)
+💡 **Don't have API keys?** For details on creating API keys, see [Api Credential Guide](api-credentials.md)
 
 ## Installation Methods
 
-Local Development Installation
+### Install verified community nodes
+
+**Recommended for most users** - Install directly from the n8n interface:
+
+1. **Open the nodes panel**
+   Go to the Canvas and click the `+` button (or press `Tab`)
+
+2. **Search for Lara Translate**
+   Type "Lara Translate" in the search bar. You'll see a "More from the community" section at the bottom
+
+3. **View node details**
+   Click on the Lara Translate node to see all supported operations and actions
+
+4. **Install the node**  
+   Click the **Install** button. The node will be installed for your entire instance and available to all team members
+
+5. **Start using it**  
+   Add the Lara Translate node to your workflows and [configure Lara for n8n](docs/configuration.md)
+
+> **💡 Tip:** For detailed installation instructions and troubleshooting, see the official [n8n community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/)
+
+### Local Development Installation
 
 #### Step-by-Step Installation
 
@@ -36,10 +57,10 @@ nvm install
 nvm use
 ```
 
-Otherwise, ensure you have Node.js 20.15+ installed:
+Otherwise, ensure you have Node.js 22.20.0+ installed:
 
 ```bash
-node --version  # Should be 20.15 or higher
+node --version  # Should be 22.20.0 or higher
 ```
 
 3. **Install Dependencies**
@@ -53,8 +74,6 @@ pnpm install
 ```bash
 pnpm build
 ```
-
-This compiles TypeScript to JavaScript and processes assets.
 
 5. **Link the Package Globally**
 

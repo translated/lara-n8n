@@ -29,23 +29,6 @@ Official n8n community node for [Lara Translate](https://laratranslate.com), ena
 
 ### Install via n8n Community Nodes
 
-**Recommended for most users** - Install directly from the n8n interface:
-
-1. **Open the nodes panel**  
-   Go to the Canvas and click the `+` button (or press `Tab`)
-
-2. **Search for Lara Translate**  
-   Type "Lara Translate" in the search bar. You'll see a "More from the community" section at the bottom
-
-3. **View node details**  
-   Click on the Lara Translate node to see all supported operations and actions
-
-4. **Install the node**  
-   Click the **Install** button. The node will be installed for your entire instance and available to all team members
-
-5. **Start using it**  
-   Add the Lara Translate node to your workflows and [configure Lara for n8n](docs/configuration.md)
-
 > **💡 Tip:** For detailed installation instructions and troubleshooting, see the official [n8n community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/)
 
 ### Local Development

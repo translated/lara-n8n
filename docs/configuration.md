@@ -28,7 +28,7 @@ Before using the Lara Translate node, you need to configure your API credentials
 
 ### Getting API Credentials
 
-If you don't have API credentials: see [Api Credential Guide](docs/api-credentials.md)
+If you don't have API credentials: see [Api Credential Guide](api-credentials.md)
 
 ## Node Configuration
 
@@ -58,11 +58,11 @@ Choose the type of translation:
 - **Required**: Yes
 - **Options**: 150+ language codes (en, es, fr, de, it, etc.)
 - **Description**: The language you want to translate to
-- **Note**: il noCannot be empty; must specify a target
+- **Note**: Cannot be empty; must specify a target
 
 ### Operation-Specific Configuration
 
 Depending on your chosen operation, additional fields will appear:
 
-- [Translate Text](/docs/operations/translate-text.md)
-- [Translate Document](/docs/operations/translate-document.md)
+- [Translate Text](operations/translate-text.md)
+- [Translate Document](operations/translate-document.md)
