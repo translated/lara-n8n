@@ -1,30 +1,63 @@
-# Lara Translate for n8n
+<div align="center">
+
+# 🌐 Lara Translate for n8n
+
 Official n8n community node for [Lara Translate](https://laratranslate.com), enabling powerful translation capabilities with support for language detection, context-aware translations, translation memories and glossaries.
 
-## Table of Contents
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/translated/lara-n8n)
+[![n8n Community Node](https://img.shields.io/badge/n8n-Community%20Node-blueviolet.svg)](https://www.npmjs.com/package/n8n-nodes-lara-translate)
 
-- [Installation](#installation)
-- [Local Installation](#local-installation)
-- [Resources](#resources)
+</div>
 
 ---
 
+## 📑 Table of Contents
+
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Documentation](#documentation)
+- [Resources](#resources)
+
+## Requirements
+
+- **n8n** version 1.114.4 or higher
+- **Node.js** version 22.20.0 or higher
+- **pnpm** v9 or higher
+
 ## Installation
 
-Follow the [installation guide](https://docs.n8n.io/integrations/community-nodes/installation/) in the n8n community nodes documentation.
+### Install via n8n Community Nodes
 
-## Local Installation
+**Recommended for most users** - Install directly from the n8n interface:
 
-To test the node in development mode:
+1. **Open the nodes panel**  
+   Go to the Canvas and click the `+` button (or press `Tab`)
+
+2. **Search for Lara Translate**  
+   Type "Lara Translate" in the search bar. You'll see a "More from the community" section at the bottom
+
+3. **View node details**  
+   Click on the Lara Translate node to see all supported operations and actions
+
+4. **Install the node**  
+   Click the **Install** button. The node will be installed for your entire instance and available to all team members
+
+5. **Start using it**  
+   Add the Lara Translate node to your workflows and [configure Lara for n8n](docs/configuration.md)
+
+> **💡 Tip:** For detailed installation instructions and troubleshooting, see the official [n8n community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/)
+
+### Local Development
 
 ```bash
-# Install n8n globally
-npm install n8n -g
+# Clone the repository
+git clone https://github.com/translated/lara-n8n.git
 
 # Navigate to the project directory
-cd /path/to/lara-n8n
+cd lara-n8n
 
-# Install and use the correct Node version
+# Install the correct Node version
 nvm install
 nvm use
 
@@ -39,11 +72,55 @@ pnpm link
 
 # Link to n8n custom nodes
 cd ~/.n8n/custom/
-pnpm link lara-n8n
+pnpm link n8n-nodes-lara-translate
 
 # Start n8n
 n8n start
 ```
+
+> **📖 For detailed setup instructions, see [Getting Started](docs/getting-started.md)**
+
+## Quick Start
+
+### 1. Configure Credentials
+
+Before using the node, you need to configure your Lara Translate API credentials:
+
+1. In your n8n workflow, add the **Lara Translate** node
+2. Click on **Credentials** and create new credentials
+3. Enter your **Access Key ID** and **Access Key Secret**
+
+💡 **Don't have API keys?** For details on creating API keys, see [Api Credential Guide](docs/api-credentials.md)
+
+> **📖 For detailed configuration, see [Configuration Guide](docs/configuration.md)**
+
+### 2. Choose Your Operation
+
+The node supports two main operations:
+
+#### Translate Text
+Translate plain text or XLIFF content with full control over style, caching, and advanced options.
+
+> **📖 Learn more: [Text Translation Guide](docs/operations/translate-text.md)**
+
+#### Translate Document
+Translate documents in various formats (PDF, DOCX, PPTX, XLSX, etc.) while preserving formatting.
+
+> **📖 Learn more: [Document Translation Guide](docs/operations/translate-document.md)**
+
+## Documentation
+
+### Getting Started
+- [Installation & Setup](docs/getting-started.md) - Requirements and installation instructions
+- [Configuration](docs/configuration.md) - API credentials and node configuration
+
+### Operations
+- [Translate Text](docs/operations/translate-text.md) - Text translation with examples
+- [Translate Document](docs/operations/translate-document.md) - Document translation workflow
+
+### Reference
+- [Supported Languages](docs/supported-languages.md) - Full list of supported languages
+- [Supported File Formats](docs/supported-formats.md) - Document formats and specifications
 
 ## Resources
 
@@ -51,5 +128,9 @@ n8n start
 - [Lara API Documentation](https://developers.laratranslate.com)
 - [n8n Community Nodes](https://docs.n8n.io/integrations/community-nodes/)
 
-\
-Made with ❤️ for the n8n community.
+
+<div align="center">
+
+Made with ❤️ by [Translated](https://translated.com) for the n8n community
+
+</div>
