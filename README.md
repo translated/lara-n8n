@@ -31,11 +31,11 @@ Official n8n community node for [Lara Translate](https://laratranslate.com), ena
 
 ### Install via n8n Community Nodes
 
-> **💡 Tip:** For detailed installation instructions and troubleshooting, see the official [n8n community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/)
+> 📖 See the official [n8n community nodes installation guide](https://docs.n8n.io/integrations/community-nodes/installation/)
 
 ### Local Development
 
-> **📖 For setup instructions, see [Getting Started](docs/config/getting-started.md)**
+> 📖 For setup instructions, see [Getting Started](docs/config/getting-started.md)
 
 ## Quick Start
 

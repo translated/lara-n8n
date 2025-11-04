@@ -1,5 +1,7 @@
 # Supported File Formats
 
+> **← Back to [README](../../README.md) | [Translate Document Guide](translate-document.md)**
+
 ## Important Note
 
 **PDF Format Handling:** Lara returns the translated document in the same format as the source file, except for files in `.pdf` format. By default, PDF files are translated and returned in `.docx` format. To obtain a `.pdf` file from a `.pdf` document, you must explicitly set the "output format" parameter to "pdf".

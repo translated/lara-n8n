@@ -1,5 +1,7 @@
 # Supported Languages
 
+> **← Back to [README](../../README.md) | [Translate Text Guide](translate-text.md) | [Translate Document Guide](translate-document.md)**
+
 Lara Translate for n8n supports over 150 languages and regional variants, covering the vast majority of global translation needs.
 
 ### ISO 639-1 Language Codes

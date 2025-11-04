@@ -5,6 +5,8 @@ sidebar_position: 4
 
 # Translate Document
 
+> **← Back to [Getting Started Guide](configuration.md)** for installation and configuration instructions.
+
 ## Translate Method
 
 The SDK contains a translate method that simplifies the process of translating documents by uploading the file, checking the status at regular intervals, and returning the result of the download function.

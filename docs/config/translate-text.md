@@ -5,6 +5,8 @@ sidebar_position: 3
 
 # Translate Text
 
+> **← Back to [Getting Started Guide](configuration.md)** for installation and configuration instructions.
+
 ## Overview
 
 Translates text from a source language to a target language. It supports single-sentence translations, context-aware translations and adaptation to specific translation memories.

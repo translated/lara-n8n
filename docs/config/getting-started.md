@@ -149,8 +149,4 @@ n8n start
 
 ## Next Steps
 
-Now that you have the node installed, you're ready to:
-
-1. **[Configure Lara N8N in your workflow](configuration.md)** - Set up authentication
-2. **[Translate text](translate-text.md)** - Learn text translation
-3. **[Translate documents](translate-document.md)** - Learn document translation
+**[Configure Lara N8N in your workflow](configuration.md)** - Set up authentication and basic node configuration.

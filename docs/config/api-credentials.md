@@ -1,5 +1,7 @@
 # How to Obtain Lara API Credentials
 
+> **← Back to [Configuration Guide](configuration.md)**
+
 This guide walks you through step-by-step how to obtain your API credentials (Access Key ID and Access Key Secret) needed to use the Lara Translate node in n8n.
 
 ## Prerequisites
