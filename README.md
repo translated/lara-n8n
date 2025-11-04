@@ -33,35 +33,7 @@ Official n8n community node for [Lara Translate](https://laratranslate.com), ena
 
 ### Local Development
 
-```bash
-# Clone the repository
-git clone https://github.com/translated/lara-n8n.git
-
-# Navigate to the project directory
-cd lara-n8n
-
-# Install the correct Node version
-nvm install
-nvm use
-
-# Install dependencies
-pnpm install
-
-# Build the project
-pnpm build
-
-# Link the package
-pnpm link
-
-# Link to n8n custom nodes
-cd ~/.n8n/custom/
-pnpm link n8n-nodes-lara-translate
-
-# Start n8n
-n8n start
-```
-
-> **📖 For detailed setup instructions, see [Getting Started](docs/config/getting-started.md)**
+> **📖 For setup instructions, see [Getting Started](docs/config/getting-started.md)**
 
 ## Quick Start
 
