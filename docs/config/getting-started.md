@@ -14,7 +14,7 @@ Before you begin, ensure you have the following:
 - **Node.js** version 22.20.0 or higher
 - **pnpm** - Package manager (install with `npm install -g pnpm`)
 - **n8n** - Installed globally (`npm install -g n8n`)
-- **nvm** (optional) - Node version manager for easy Node.js version switching
+- **nvm** (optional) - Node version manager for easy Node.js version switching 
 - **Lara Translate API credentials** (Access Key ID and Access Key Secret)
 
 💡 **Don't have API keys?** For details on creating API keys, see [Api Credential Guide](api-credentials.md)
@@ -46,14 +46,31 @@ Before you begin, ensure you have the following:
 
 #### Step-by-Step Installation
 
-1. **Clone the Repository**
+1. **Install NVM (Node Version Manager)**
+
+If you don't have NVM installed, follow the installation guide for your operating system:
+[NVM Installation Guide](https://www.nvmnode.com/it/guide/introduction.html)
+
+2. **Install pnpm**
+
+```bash
+npm install -g pnpm
+```
+
+3. **Install n8n Globally**
+
+```bash
+npm install n8n -g
+```
+
+4. **Clone the Repository**
 
 ```bash
 git clone https://github.com/translated/lara-n8n.git
 cd lara-n8n
 ```
 
-2. **Install and Use Correct Node Version**
+5. **Install and Use Correct Node Version**
 
 If you have nvm installed:
 
@@ -68,25 +85,25 @@ Otherwise, ensure you have Node.js 22.20.0+ installed:
 node --version  # Should be 22.20.0 or higher
 ```
 
-3. **Install Dependencies**
+6. **Install Dependencies**
 
 ```bash
 pnpm install
 ```
 
-4. **Build the Project**
+7. **Build the Project**
 
 ```bash
 pnpm build
 ```
 
-5. **Link the Package Globally**
+8. **Link the Package Globally**
 
 ```bash
 pnpm link --global
 ```
 
-6. **Link to n8n Custom Nodes**
+9. **Link to n8n Custom Nodes**
 
 Create the custom nodes directory if it doesn't exist:
 
@@ -98,16 +115,16 @@ cd ~/.n8n/custom
 Link the package:
 
 ```bash
-pnpm link --global n8n-nodes-lara-translate
+pnpm link n8n-nodes-lara-translate
 ```
 
-7. **Start n8n**
+10. **Start n8n**
 
 ```bash
 n8n start
 ```
 
-8. **Verify Installation**
+11. **Verify Installation**
 
 - Open n8n in your browser (usually `http://localhost:5678`)
 - Create a new workflow

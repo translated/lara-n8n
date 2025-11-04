@@ -21,9 +21,11 @@ Official n8n community node for [Lara Translate](https://laratranslate.com), ena
 
 ## Requirements
 
-- **n8n** version 1.114.4 or higher
 - **Node.js** version 22.20.0 or higher
-- **pnpm** v9 or higher
+- **pnpm** - Package manager (install with `npm install -g pnpm`)
+- **n8n** - Installed globally (`npm install -g n8n`)
+- **nvm** (optional) - Node version manager for easy Node.js version switching 
+- **Lara Translate API credentials** (Access Key ID and Access Key Secret)
 
 ## Installation
 
