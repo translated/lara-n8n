@@ -100,7 +100,7 @@ pnpm build
 8. **Link the Package Globally**
 
 ```bash
-pnpm link --global
+pnpm link
 ```
 
 9. **Link to n8n Custom Nodes**
@@ -110,6 +110,7 @@ Create the custom nodes directory if it doesn't exist:
 ```bash
 mkdir -p ~/.n8n/custom
 cd ~/.n8n/custom
+pnpm init
 ```
 
 Link the package:
