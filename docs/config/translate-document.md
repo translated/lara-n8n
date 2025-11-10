@@ -5,11 +5,11 @@ sidebar_position: 4
 
 # Translate Document
 
-> **← Back to [Getting Started Guide](configuration.md)** for installation and configuration instructions.
+> **← Back to [Configuration Guide](configuration.md)** for installation and configuration instructions.
 
 ## Translate Method
 
-The SDK contains a translate method that simplifies the process of translating documents by uploading the file, checking the status at regular intervals, and returning the result of the download function.
+The Lara Translate node simplifies the process of translating documents by uploading the file, checking the status at regular intervals, and returning the translated document.
 
 ## Supported Fields
 
@@ -32,9 +32,9 @@ The SDK contains a translate method that simplifies the process of translating d
 - **noTrace** - No trace option (Incognito mode)
 - **style** - Translation style preference (faithful, fluid, creative)
 
-For more details on supported languages ​​see [supported-languages.md](supported-languages.md)
+For more details on supported languages see [supported-languages.md](supported-languages.md)
 
-For more details on supported formats ​​see [supported-formats.md](supported-formats.md)
+For more details on supported formats see [supported-formats.md](supported-formats.md)
 
 For more information about these fields, refer to the [official documentation](https://developers.laratranslate.com/docs/translate-document).
 

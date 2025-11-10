@@ -17,7 +17,7 @@ Before you begin, ensure you have the following:
 - **nvm** (optional) - Node version manager for easy Node.js version switching 
 - **Lara Translate API credentials** (Access Key ID and Access Key Secret)
 
-💡 **Don't have API keys?** For details on creating API keys, see [Api Credential Guide](api-credentials.md)
+💡 **Don't have API keys?** For details on creating API keys, see [API Credentials Guide](api-credentials.md)
 
 ## Installation Methods
 
@@ -49,7 +49,7 @@ Before you begin, ensure you have the following:
 1. **Install NVM (Node Version Manager)**
 
 If you don't have NVM installed, follow the installation guide for your operating system:
-[NVM Installation Guide](https://www.nvmnode.com/it/guide/introduction.html)
+[NVM Installation Guide](https://github.com/nvm-sh/nvm)
 
 2. **Install pnpm**
 
@@ -150,4 +150,4 @@ n8n start
 
 ## Next Steps
 
-**[Configure Lara N8N in your workflow](configuration.md)** - Set up authentication and basic node configuration.
+**[Configure the Lara Translate node](configuration.md)** - Set up authentication and basic node configuration.

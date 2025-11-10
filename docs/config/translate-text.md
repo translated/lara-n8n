@@ -5,7 +5,7 @@ sidebar_position: 3
 
 # Translate Text
 
-> **← Back to [Getting Started Guide](configuration.md)** for installation and configuration instructions.
+> **← Back to [Configuration Guide](configuration.md)** for installation and configuration instructions.
 
 ## Overview
 
@@ -31,6 +31,6 @@ Translates text from a source language to a target language. It supports single-
 - **noTrace** - No trace option (Incognito mode)
 - **style** - Translation style preference (faithful, fluid, creative)
 
-For more details on supported languages ​​see [supported-languages.md](supported-languages.md)
+For more details on supported languages see [supported-languages.md](supported-languages.md)
 
 For more information about these fields, refer to the [official documentation](https://developers.laratranslate.com/docs/translate-text).

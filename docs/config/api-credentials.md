@@ -116,5 +116,5 @@ If you suspect your API key has been compromised:
 
 ---
 
-**Next Steps**: After obtaining the credentials, see the [Getting Started Guide](getting-started.md) to configure the Lara Translate node in your n8n workflow.
+**Next Steps**: After obtaining the credentials, see the [Configuration Guide](configuration.md) to configure the Lara Translate node in your n8n workflow.
 

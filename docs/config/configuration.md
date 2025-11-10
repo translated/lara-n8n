@@ -33,7 +33,7 @@ Before using the Lara Translate node, you need to configure your API credentials
 
 ### Getting API Credentials
 
-If you don't have API credentials: see [Api Credential Guide](api-credentials.md)
+If you don't have API credentials: see [API Credentials Guide](api-credentials.md)
 
 ## Node Configuration
 
