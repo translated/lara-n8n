@@ -1,8 +1,3 @@
----
-title: Getting Started
-sidebar_position: 1
----
-
 # Getting Started
 
 This guide will help you install and set up the Lara Translate node for n8n.

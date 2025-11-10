@@ -79,7 +79,7 @@ Follow this recommended reading path:
 
 **Reference Guides:**
 - [API Credentials Setup](docs/config/api-credentials.md) - Detailed guide for obtaining API keys
-- [Supported Languages](docs/config/supported-languages.md) - 150+ supported languages
+- [Supported Languages](docs/config/supported-languages.md) - 200+ supported languages
 - [Supported File Formats](docs/config/supported-formats.md) - Document format specifications
 
 ## Resources

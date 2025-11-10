@@ -1,8 +1,3 @@
----
-title: Translate Document
-sidebar_position: 4
----
-
 # Translate Document
 
 > **← Back to [Configuration Guide](configuration.md)** for installation and configuration instructions.

@@ -1,8 +1,3 @@
----
-title: Configuration
-sidebar_position: 2
----
-
 # Configuration
 
 This guide covers how to configure the Lara Translate node in your n8n workflows, including credential setup and basic node configuration.
@@ -55,13 +50,13 @@ Choose the type of translation:
 
 #### 3. Source Language
 - **Default**: Autodetect
-- **Options**: 150+ language codes (en, es, fr, de, it, etc.)
+- **Options**: 200+ language codes (en, es, fr, de, it, etc.)
 - **Description**: The source language of your content
 - **Tip**: Use "Autodetect" if you're unsure or processing content in multiple languages
 
 #### 4. Target Language
 - **Required**: Yes
-- **Options**: 150+ language codes (en, es, fr, de, it, etc.)
+- **Options**: 200+ language codes (en, es, fr, de, it, etc.)
 - **Description**: The language you want to translate to
 - **Note**: Cannot be empty; must specify a target
 
