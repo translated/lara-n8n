@@ -352,7 +352,7 @@ export const translateDocumentFields: INodeProperties[] = [
 					},
 				],
 				description:
-					'When you translate a ".pdf" file, you will receive a ".doc" file in output. Use this field to receive a ".pdf" file in output.',
+					'When you translate a ".pdf" file, you will receive a ".docx" file in output. Use this field to receive a ".pdf" file in output.',
 			},
 			{
 				displayName: 'Password',

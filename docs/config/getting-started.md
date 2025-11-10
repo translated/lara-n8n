@@ -6,7 +6,7 @@ This guide will help you install and set up the Lara Translate node for n8n.
 
 Before you begin, ensure you have the following:
 
-- **Node.js** version 22.20.0 or higher
+- **Node.js** version 20.15 or higher
 - **pnpm** - Package manager (install with `npm install -g pnpm`)
 - **n8n** - Installed globally (`npm install -g n8n`)
 - **nvm** (optional) - Node version manager for easy Node.js version switching 
@@ -74,10 +74,10 @@ nvm install
 nvm use
 ```
 
-Otherwise, ensure you have Node.js 22.20.0+ installed:
+Otherwise, ensure you have Node.js 20.15+ installed:
 
 ```bash
-node --version  # Should be 22.20.0 or higher
+node --version  # Should be 20.15 or higher
 ```
 
 6. **Install Dependencies**

@@ -10,7 +10,7 @@ Translates text from a source language to a target language. It supports single-
 
 ### Required Parameters
 
-- **text** - The text to be translated (string or array)
+- **text** - The text to be translated (string)
 - **target** - Target language code
 
 ### Optional Parameters
@@ -20,7 +20,7 @@ Translates text from a source language to a target language. It supports single-
 - **instructions** - Custom instructions to guide the translation
 - **timeoutMs** - Maximum time to wait for translation response (in milliseconds)
 - **useCache** - Whether to use cached translations if available
-- **cacheTTL** - Time-to-live for cache entries (in seconds)
+- **cacheTtl** - Time-to-live for cache entries (in seconds)
 - **glossaries** - List of glossary IDs to apply
 - **adaptTo** - Translation memory IDs to adapt the translation
 - **noTrace** - No trace option (Incognito mode)
