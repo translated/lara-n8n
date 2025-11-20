@@ -106,7 +106,7 @@ Basic settings you need to configure:
 
 1. Click **Execute Node** (or **Test Step**) to try the translation
 2. Check the result in the **OUTPUT** section
-3. If everything is ok, connect the node to other steps in your workflow
+3. If everything is OK, connect the node to other steps in your workflow
 4. Activate the workflow by clicking the switch in the top right
 
 ***
