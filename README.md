@@ -39,31 +39,91 @@ Official n8n community node for [Lara Translate](https://laratranslate.com), ena
 
 ## Quick Start
 
-### 1. Configure Credentials
+### Before You Begin
 
-Before using the node, you need to configure your Lara Translate API credentials:
+To use this node you need:
 
-1. In your n8n workflow, add the **Lara Translate** node
-2. Click on **Credentials** and create new credentials
-3. Enter your **Access Key ID** and **Access Key Secret**
+- An account on [Lara Translate](https://laratranslate.com) (you can start for free)
+- Your API credentials (Access Key ID and Access Key Secret)
 
-💡 **Don't have API keys?** For details on creating API keys, see [API Credentials Guide](docs/config/api-credentials.md)
+> 💡 **Don't have API credentials yet?** Follow our [API Credentials Guide](docs/config/api-credentials.md)
 
-> **📖 For detailed configuration, see [Configuration Guide](docs/config/configuration.md)**
+### Step 1: Add the Node to Your Workflow
 
-### 2. Choose Your Operation
+1. Open or create a new workflow in n8n
+2. Click the **+** button to open the nodes menu
+3. Search for **"Lara Translate"** in the search bar
+4. Click on the node to add it to the canvas
 
-The node supports two main operations:
+### Step 2: Configure Credentials
 
-#### Translate Text
-Translate plain text or XLIFF content with full control over style, caching, and advanced options.
+The first time you use the node, you need to configure your credentials:
 
-> **📖 Learn more: [Text Translation Guide](docs/config/translate-text.md)**
+1. In the Lara Translate node, click **Select Credential** → **Create New**
+2. Enter your credentials:
+    - **Access Key ID**: your public key
+    - **Access Key Secret**: your secret key
+3. Click **Save** to save the credentials
 
-#### Translate Document
-Translate documents in various formats (PDF, DOCX, PPTX, XLSX, etc.) while preserving formatting.
+### Step 3: Choose What to Translate
 
-> **📖 Learn more: [Document Translation Guide](docs/config/translate-document.md)**
+The node offers **2 translation modes**:
+
+#### 🔤 **Translate Text** - For texts and short content
+
+Perfect for translating:
+
+- Messages and notifications
+- Dynamic content from other nodes
+- XLIFF format texts
+- Strings from databases or APIs
+
+**Practical example**: Automatically translate customer emails into your language before archiving them.
+
+#### 📄 **Translate Document** - For files and documents
+
+Perfect for translating:
+
+- PDF, Word, Excel, PowerPoint
+- HTML and XML files
+- Documents while maintaining original formatting
+
+**Practical example**: Automatically translate documents uploaded by users and save them to a specific folder.
+
+### Step 4: Configure the Translation
+
+Basic settings you need to configure:
+
+1. **Source Language**: The language of the original text
+    - Use **"Detect language"** if you don't know the source language
+2. **Target Language**: The language you want to translate to
+    - Choose from over 200 available languages
+3. **Input Content**:
+    - **For Text Translation**: Enter the text directly or map it from previous nodes
+    - **For Document Translation**: Provide the file path or use binary data from previous nodes
+
+### Step 5: Test and Activate
+
+1. Click **Execute Node** (or **Test Step**) to try the translation
+2. Check the result in the **OUTPUT** section
+3. If everything is OK, connect the node to other steps in your workflow
+4. Activate the workflow by clicking the switch in the top right
+
+***
+
+### 🎯 Quick Example
+
+Want to translate text from English to Italian?
+
+1. Add the **Lara Translate** node
+2. Select **Translate Text**
+3. Set:
+    - Source Language: **English**
+    - Target Language: **Italian**
+    - Text: enter or map the text to translate
+4. Click **Execute Node** and get the translation!
+
+***
 
 ## Documentation
 
