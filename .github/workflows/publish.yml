@@ -17,7 +17,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.15'
+          node-version: '22.20.0'
           registry-url: 'https://registry.npmjs.org'
       
       - name: Setup pnpm
@@ -45,7 +45,7 @@ jobs:
         run: pnpm run build
       
       - name: Publish to npm
-        run: npm publish --provenance #--access public
+        run: pnpm publish --provenance #--access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
