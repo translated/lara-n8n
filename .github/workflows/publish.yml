@@ -1,9 +1,7 @@
 name: Publish to npm
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'
+  workflow_dispatch:
 
 jobs:
   publish:
@@ -47,7 +45,7 @@ jobs:
         run: pnpm run build
       
       - name: Publish to npm
-        run: npm publish --provenance --access public
+        run: npm publish --provenance #--access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
