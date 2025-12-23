@@ -1,0 +1,64 @@
+{
+  "name": "n8n-nodes-lara-translate",
+  "version": "0.1.2",
+  "description": "Lara Translate",
+  "keywords": [
+    "n8n-community-node-package",
+    "lara",
+    "translate",
+    "translated"
+  ],
+  "license": "MIT",
+  "homepage": "http://laratranslate.com",
+  "author": {
+    "name": "Lara Translate",
+    "email": "info@laratranslate.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/translated/lara-n8n"
+  },
+  "engines": {
+    "node": ">=20.15"
+  },
+  "scripts": {
+    "build": "npx rimraf dist && tsc && gulp build:icons",
+    "dev": "tsc --watch",
+    "format": "prettier nodes credentials --write",
+    "lint": "eslint nodes credentials package.json",
+    "lintfix": "eslint nodes credentials package.json --fix",
+    "prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/LaraTranslateApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/LaraTranslate/LaraTranslate.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@types/mime-types": "^3.0.1",
+    "@typescript-eslint/parser": "~8.32.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-n8n-nodes-base": "^1.16.3",
+    "gulp": "^5.0.0",
+    "link": "^2.1.1",
+    "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
+    "typescript": "5.8.3"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "packageManager": "pnpm@10.18.2",
+  "dependencies": {
+    "@translated/lara": "^1.6.4",
+    "mime-types": "^3.0.1",
+    "n8n": "^1.106.3"
+  }
+}
