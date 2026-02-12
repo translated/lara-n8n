@@ -252,47 +252,6 @@ export const translateTextFields: INodeProperties[] = [
 ];
 
 export const translateDocumentFields: INodeProperties[] = [
-	{
-		displayName: 'Input Source',
-		name: 'inputSource',
-		type: 'options',
-		default: 'path',
-		displayOptions: {
-			show: {
-				resource: ['translation'],
-				operation: ['translateDocument'],
-			},
-		},
-		options: [
-			{
-				name: 'File Path',
-				value: 'path',
-				description: 'Specify the path to the document file',
-			},
-			{
-				name: 'Binary Data',
-				value: 'binary',
-				description: 'Use binary data from a previous node',
-			},
-		],
-		description: 'Choose whether to use a file path or binary data',
-	},
-	{
-		displayName: 'Document Path',
-		name: 'documentPath',
-		type: 'string',
-		default: '',
-		required: true,
-		displayOptions: {
-			show: {
-				resource: ['translation'],
-				operation: ['translateDocument'],
-				inputSource: ['path'],
-			},
-		},
-		description:
-			'The path to the document you want to translate. Example: "./example/document.pdf".',
-	},
 	// eslint-disable-next-line n8n-nodes-base/node-param-default-missing
 	{
 		displayName: 'Input Binary Field',
@@ -304,10 +263,10 @@ export const translateDocumentFields: INodeProperties[] = [
 			show: {
 				resource: ['translation'],
 				operation: ['translateDocument'],
-				inputSource: ['binary'],
 			},
 		},
-		description: 'The name of the binary property containing the file to translate',
+		description:
+			'The name of the binary property containing the file to translate. Use the "Read Binary File" node to load a file first.',
 		placeholder: 'e.g., data',
 	},
 	{
@@ -353,16 +312,6 @@ export const translateDocumentFields: INodeProperties[] = [
 				],
 				description:
 					'When you translate a ".pdf" file, you will receive a ".docx" file in output. Use this field to receive a ".pdf" file in output.',
-			},
-			{
-				displayName: 'Password',
-				name: 'password',
-				type: 'string',
-				default: '',
-				typeOptions: {
-					password: true,
-				},
-				description: "The password of the PDF file if it's password protected",
 			},
 		],
 	},

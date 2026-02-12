@@ -3,7 +3,12 @@ export enum PdfTranslationExtensions {
 	DOCX = 'docx',
 }
 
-export enum InputSource {
-	PATH = 'path',
-	BINARY = 'binary',
+export enum DocumentStatus {
+	INITIALIZED = 'initialized',
+	ANALYZING = 'analyzing',
+	PAUSED = 'paused',
+	READY = 'ready',
+	TRANSLATING = 'translating',
+	TRANSLATED = 'translated',
+	ERROR = 'error',
 }

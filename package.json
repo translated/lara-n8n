@@ -1,7 +1,7 @@
 {
   "name": "n8n-nodes-lara-translate",
   "version": "0.1.2",
-  "description": "Lara Translate",
+  "description": "n8n community node for translating text and documents with Lara Translate API",
   "keywords": [
     "n8n-community-node-package",
     "lara",
@@ -9,7 +9,7 @@
     "translated"
   ],
   "license": "MIT",
-  "homepage": "http://laratranslate.com",
+  "homepage": "https://laratranslate.com",
   "author": {
     "name": "Lara Translate",
     "email": "info@laratranslate.com"
@@ -27,7 +27,10 @@
     "format": "prettier nodes credentials --write",
     "lint": "eslint nodes credentials package.json",
     "lintfix": "eslint nodes credentials package.json --fix",
-    "prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "pnpm run build && npx eslint -c .eslintrc.prepublish.js nodes credentials package.json"
   },
   "files": [
     "dist"
@@ -42,7 +45,8 @@
     ]
   },
   "devDependencies": {
-    "@types/mime-types": "^3.0.1",
+    "@types/node": "^25.2.3",
+    "@vitest/coverage-v8": "^3.0.5",
     "@typescript-eslint/parser": "~8.32.0",
     "eslint": "^8.57.0",
     "eslint-plugin-n8n-nodes-base": "^1.16.3",
@@ -50,15 +54,11 @@
     "link": "^2.1.1",
     "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
-    "typescript": "5.8.3"
+    "typescript": "5.8.3",
+    "vitest": "^3.0.5"
   },
   "peerDependencies": {
     "n8n-workflow": "*"
   },
-  "packageManager": "pnpm@10.18.2",
-  "dependencies": {
-    "@translated/lara": "^1.6.4",
-    "mime-types": "^3.0.1",
-    "n8n": "^1.106.3"
-  }
+  "packageManager": "pnpm@10.18.2"
 }

@@ -27,4 +27,8 @@
 		"nodes/**/*.json",
 		"package.json",
 	],
+	"exclude": [
+		"__tests__/**/*",
+		"vitest.config.ts",
+	],
 }
