@@ -1,13 +1,9 @@
 import { createHash, createHmac, randomBytes } from 'node:crypto';
-import { IHttpRequestOptions } from 'n8n-workflow';
+import { IHttpRequestOptions, sleep } from 'n8n-workflow';
 import { LaraTranslateAdditionalOptions, TextResult } from '../types/types';
 import { DocumentStatus } from '../types/enums';
 
 type HttpRequestFn = (options: IHttpRequestOptions) => Promise<any>;
-
-function delay(ms: number): Promise<void> {
-	return new Promise((resolve) => { globalThis.setTimeout(resolve, ms); });
-}
 
 const BASE_URL = 'https://api.laratranslate.com';
 const POLLING_INTERVAL_MS = 2000;
@@ -307,7 +303,7 @@ export class LaraApiClient {
 				throw new Error(`DocumentError: ${currentErrorReason || 'Unknown document error'}`);
 			}
 
-			await delay(POLLING_INTERVAL_MS);
+			await sleep(POLLING_INTERVAL_MS);
 
 			const polled = (await this.request('GET', `/documents/${documentId}`)) as {
 				status: string;
