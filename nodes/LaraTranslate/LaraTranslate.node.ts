@@ -90,17 +90,25 @@ export class LaraTranslate implements INodeType {
 						.update(challenge)
 						.digest('base64');
 
-					await this.helpers.request({
+					const response = await fetch('https://api.laratranslate.com/memories', {
 						method: 'POST',
-						uri: 'https://api.laratranslate.com/memories',
 						headers: {
 							'X-HTTP-Method-Override': method,
 							'X-Lara-Date': date,
 							'Content-Type': contentType,
 							Authorization: `Lara ${accessKeyId}:${signature}`,
 						},
-						json: true,
 					});
+
+					if (!response.ok) {
+						let detail = '';
+						try {
+							const body = await response.json() as { message?: string };
+							if (body.message) detail = `: ${body.message}`;
+						} catch {}
+						// eslint-disable-next-line n8n-nodes-base/node-execute-block-wrong-error-thrown
+						throw new Error(`Failed to authenticate with Lara API: HTTP ${response.status}${detail}`);
+					}
 
 					return {
 						status: 'OK',

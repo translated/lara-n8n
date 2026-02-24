@@ -1,4 +1,5 @@
 import { createHash, createHmac, randomBytes } from 'node:crypto';
+import { setTimeout } from 'node:timers/promises';
 import { IHttpRequestOptions } from 'n8n-workflow';
 import { LaraTranslateAdditionalOptions, TextResult } from '../types/types';
 import { DocumentStatus } from '../types/enums';
@@ -303,7 +304,7 @@ export class LaraApiClient {
 				throw new Error(`DocumentError: ${currentErrorReason || 'Unknown document error'}`);
 			}
 
-			await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL_MS));
+			await setTimeout(POLLING_INTERVAL_MS);
 
 			const polled = (await this.request('GET', `/documents/${documentId}`)) as {
 				status: string;
