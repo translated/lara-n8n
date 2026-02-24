@@ -20,15 +20,15 @@ export function getErrorMessage(error: unknown): string {
 }
 
 /**
- * Creates a formatted Lara SDK error with context
+ * Creates a formatted Lara API error with context
  * @param error - Original error
  * @param context - Context string (e.g., 'text translation', 'document translation')
  * @returns Formatted Error instance
- * @example createLaraError(new Error('Failed'), 'translation') // Error: 'Lara SDK error (translation): Failed'
+ * @example createLaraError(new Error('Failed'), 'translation') // Error: 'Lara API error (translation): Failed'
  */
 export function createLaraError(error: unknown, context: string): Error {
 	const message = getErrorMessage(error);
-	return new Error(`Lara SDK error (${context}): ${message}`);
+	return new Error(`Lara API error (${context}): ${message}`);
 }
 
 /**
@@ -56,21 +56,6 @@ export function getFileNameWithoutExtension(fileName: string): string {
 	return lastDotIndex === -1 ? fileName : fileName.substring(0, lastDotIndex);
 }
 
-/**
- * Converts Buffer or Blob to base64 string
- * @param data - Buffer or Blob data
- * @returns Base64 encoded string
- */
-export async function convertToBinaryData(data: Buffer | Blob): Promise<string> {
-	let buffer: Buffer;
-	if (data instanceof Buffer) {
-		buffer = data;
-	} else {
-		const arrayBuffer = await (data as Blob).arrayBuffer();
-		buffer = Buffer.from(arrayBuffer);
-	}
-	return buffer.toString('base64');
-}
 
 /**
  * Cleans and filters string arrays

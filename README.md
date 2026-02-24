@@ -4,7 +4,7 @@
 
 Official n8n community node for [Lara Translate](https://laratranslate.com), enabling powerful translation capabilities with support for language detection, context-aware translations, translation memories and glossaries.
 
-[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/translated/lara-n8n)
+[![Version](https://img.shields.io/badge/version-0.2.0-blue.svg)](https://github.com/translated/lara-n8n)
 [![n8n Community Node](https://img.shields.io/badge/n8n-Community%20Node-blueviolet.svg)](https://www.npmjs.com/package/n8n-nodes-lara-translate)
 
 </div>
@@ -100,7 +100,7 @@ Basic settings you need to configure:
     - Choose from over 200 available languages
 3. **Input Content**:
     - **For Text Translation**: Enter the text directly or map it from previous nodes
-    - **For Document Translation**: Provide the file path or use binary data from previous nodes
+    - **For Document Translation**: Use binary data from previous nodes (e.g., "Read Binary File" node)
 
 ### Step 5: Test and Activate
 

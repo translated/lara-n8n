@@ -3,7 +3,7 @@ import { cleanStringArray } from '../utils/utils';
 
 /**
  * Processes and validates translation options
- * Cleans and sanitizes user input before passing to Lara SDK
+ * Cleans and sanitizes user input before passing to Lara API
  */
 export class OptionsProcessor {
 	/**
@@ -69,12 +69,11 @@ export class OptionsProcessor {
 			'contentType',
 			'timeoutMs',
 			'outputFormat',
-			'password',
 		];
 
 		for (const field of scalarFields) {
 			if (options[field] !== undefined) {
-				result[field] = options[field] as any;
+				(result as Record<string, unknown>)[field] = options[field];
 			}
 		}
 

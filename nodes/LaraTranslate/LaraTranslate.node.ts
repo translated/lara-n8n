@@ -1,12 +1,17 @@
 import {
+	ICredentialTestFunctions,
+	ICredentialsDecrypted,
+	ICredentialDataDecryptedObject,
 	IExecuteFunctions,
 	ILoadOptionsFunctions,
+	INodeCredentialTestResult,
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
 	NodeConnectionType,
 	NodeOperationError,
 } from 'n8n-workflow';
+import { createHmac } from 'node:crypto';
 
 import {
 	genericAdvancedOptions,
@@ -65,18 +70,62 @@ export class LaraTranslate implements INodeType {
 	};
 
 	methods = {
+		credentialTest: {
+			async laraApiCredentialTest(
+				this: ICredentialTestFunctions,
+				credential: ICredentialsDecrypted<ICredentialDataDecryptedObject>,
+			): Promise<INodeCredentialTestResult> {
+				try {
+					const { accessKeyId, accessKeySecret } = credential.data as {
+						accessKeyId: string;
+						accessKeySecret: string;
+					};
+
+					const method = 'GET';
+					const path = '/memories';
+					const contentType = 'application/json';
+					const date = new Date().toUTCString();
+					const challenge = `${method}\n${path}\n\n${contentType}\n${date}`;
+					const signature = createHmac('sha256', accessKeySecret)
+						.update(challenge)
+						.digest('base64');
+
+					await this.helpers.request({
+						method: 'POST',
+						uri: 'https://api.laratranslate.com/memories',
+						headers: {
+							'X-HTTP-Method-Override': method,
+							'X-Lara-Date': date,
+							'Content-Type': contentType,
+							Authorization: `Lara ${accessKeyId}:${signature}`,
+						},
+						json: true,
+					});
+
+					return {
+						status: 'OK',
+						message: 'Connection successful!',
+					};
+				} catch (error) {
+					return {
+						status: 'Error',
+						message: getErrorMessage(error),
+					};
+				}
+			},
+		},
 		loadOptions: {
 			async getGlossaries(this: ILoadOptionsFunctions) {
 				try {
 					const credentials = await this.getCredentials('laraTranslateApi');
-					const lara = LaraTranslateServices.getOrCreateTranslator(credentials);
-					const glossaries = await lara.glossaries.list();
+					const lara = LaraTranslateServices.createTranslator(credentials);
+					lara.setHttpRequest(this.helpers.httpRequest.bind(this.helpers));
+					const glossaries = await lara.listGlossaries();
 					return glossaries.map((g) => ({
 						name: g.name,
 						value: g.id,
 					}));
 				} catch (error) {
-					console.error('[LaraTranslate] Failed to load glossaries:', error);
 					return [
 						{
 							name: 'Error Loading Glossaries - Check Credentials',
@@ -89,14 +138,14 @@ export class LaraTranslate implements INodeType {
 			async getMemories(this: ILoadOptionsFunctions) {
 				try {
 					const credentials = await this.getCredentials('laraTranslateApi');
-					const lara = LaraTranslateServices.getOrCreateTranslator(credentials);
-					const memories = await lara.memories.list();
+					const lara = LaraTranslateServices.createTranslator(credentials);
+					lara.setHttpRequest(this.helpers.httpRequest.bind(this.helpers));
+					const memories = await lara.listMemories();
 					return memories.map((m) => ({
 						name: m.name,
 						value: m.id,
 					}));
 				} catch (error) {
-					console.error('[LaraTranslate] Failed to load translation memories:', error);
 					return [
 						{
 							name: 'Error Loading Memories - Check Credentials',
@@ -139,7 +188,8 @@ export class LaraTranslate implements INodeType {
 
 		// Initialize Lara Translate API once per execution
 		const credentials = await this.getCredentials('laraTranslateApi');
-		const lara = LaraTranslateServices.getOrCreateTranslator(credentials);
+		const lara = LaraTranslateServices.createTranslator(credentials);
+		lara.setHttpRequest(this.helpers.httpRequest.bind(this.helpers));
 
 		for (let i = 0; i < inputItems.length; i++) {
 			try {

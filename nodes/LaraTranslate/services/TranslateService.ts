@@ -1,13 +1,12 @@
 import { IBinaryData, ICredentialDataDecryptedObject } from 'n8n-workflow';
 import { languageMapping, supportedLanguageSet, supportedExtensionsSet } from '../config/constants';
-import { LaraTranslateAdditionalOptions } from '../types/types';
-import { TextResult, Translator } from '@translated/lara';
-import { lookup as lookupMimeType } from 'mime-types';
+import { LaraTranslateAdditionalOptions, TextResult } from '../types/types';
 import { PdfTranslationExtensions } from '../types/enums';
-import { TranslatorCache } from './TranslatorCache';
-import { FileHandler } from './FileHandler';
+import { LaraApiClient } from './LaraApiClient';
 import { OptionsProcessor } from './OptionsProcessor';
-import { getFileExtension, getFileNameWithoutExtension, convertToBinaryData } from '../utils/utils';
+import { getFileExtension, getFileNameWithoutExtension } from '../utils/utils';
+import { lookupMimeType } from '../utils/mimeTypes';
+import { validateTextInput } from '../utils/validators';
 
 /**
  * Main service class for Lara Translate operations
@@ -15,15 +14,17 @@ import { getFileExtension, getFileNameWithoutExtension, convertToBinaryData } fr
  * Delegates specific responsibilities to specialized classes
  */
 class LaraTranslateServices {
-	private static translatorCache = new TranslatorCache();
-
 	/**
-	 * Retrieves or creates a cached Translator instance
+	 * Creates a new LaraApiClient instance for the given credentials
 	 * @param credentials - Decrypted credentials
-	 * @returns Translator instance
+	 * @returns LaraApiClient instance
 	 */
-	static getOrCreateTranslator(credentials: ICredentialDataDecryptedObject): Translator {
-		return this.translatorCache.getOrCreate(credentials);
+	static createTranslator(credentials: ICredentialDataDecryptedObject): LaraApiClient {
+		const { accessKeyId, accessKeySecret } = credentials;
+		if (!accessKeyId || !accessKeySecret) {
+			throw new Error('Missing credentials: accessKeyId or accessKeySecret');
+		}
+		return new LaraApiClient(accessKeyId as string, accessKeySecret as string);
 	}
 
 	/**
@@ -74,15 +75,13 @@ class LaraTranslateServices {
 	 * @returns Translation result
 	 */
 	static async translateText(data: {
-		lara: Translator;
+		lara: LaraApiClient;
 		text: string;
 		source: string;
 		target: string;
 		options: LaraTranslateAdditionalOptions;
-	}): Promise<TextResult<string>> {
-		if (data.text.trim().length === 0) {
-			throw new Error('No text to translate');
-		}
+	}): Promise<TextResult> {
+		validateTextInput(data.text);
 
 		const translateOptions = OptionsProcessor.process(data.options);
 
@@ -90,85 +89,49 @@ class LaraTranslateServices {
 	}
 
 	/**
-	 * Translates a document file using Lara API
+	 * Translates a document using Lara API
 	 * @param data - Document translation request data
 	 * @returns Translation result with binary data
 	 */
 	static async translateDocument(data: {
-		lara: Translator;
-		documentPath?: string;
-		binaryData?: IBinaryData;
+		lara: LaraApiClient;
+		fileBuffer: Buffer;
 		documentName: string;
 		source: string;
 		target: string;
 		options: LaraTranslateAdditionalOptions;
-	}): Promise<{
-		translationPlain: Blob | Buffer<ArrayBufferLike>;
-		translationBinary: { data: IBinaryData };
-	}> {
-		const { lara, documentPath, binaryData, documentName, options, source, target } = data;
+	}): Promise<{ data: IBinaryData }> {
+		const { lara, fileBuffer, documentName, options, source, target } = data;
 
 		const translateOptions = OptionsProcessor.process(options);
-
-		let fileInput: string;
-		let tempFilePath: string | null = null;
 		let extension = getFileExtension(documentName);
 
-		try {
-			// Prepare file input
-			if (binaryData?.data) {
-				tempFilePath = await FileHandler.createTempFile(binaryData, extension);
-				fileInput = tempFilePath;
-			} else if (documentPath) {
-				fileInput = documentPath;
-			} else {
-				throw new Error('Either documentPath or binaryData must be provided');
-			}
+		const translationPlain = await lara.translateDocument(
+			fileBuffer,
+			documentName,
+			source,
+			target,
+			translateOptions,
+		);
 
-			// Perform translation
-			const translationPlain = await lara.documents.translate(
-				fileInput,
-				documentName,
-				source,
-				target,
-				translateOptions,
-			);
-
-			// Convert response to binary data
-			const translationBinary = await this.buildBinaryResponse(
-				translationPlain,
-				documentName,
-				extension,
-				options,
-			);
-
-			return {
-				translationPlain,
-				translationBinary,
-			};
-		} finally {
-			// Clean up temporary file
-			if (tempFilePath) {
-				await FileHandler.deleteTempFile(tempFilePath);
-			}
-		}
+		return this.buildBinaryResponse(translationPlain, documentName, extension, options);
 	}
 
 	/**
 	 * Builds the binary response for document translation
-	 * @param translationPlain - Raw translation data
+	 * @param translationPlain - Raw translation data as Buffer
 	 * @param documentName - Original document name
 	 * @param extension - File extension
 	 * @param options - Translation options
 	 * @returns Formatted binary response
 	 */
-	private static async buildBinaryResponse(
-		translationPlain: Blob | Buffer<ArrayBufferLike>,
+	private static buildBinaryResponse(
+		translationPlain: Buffer,
 		documentName: string,
 		extension: string,
 		options: LaraTranslateAdditionalOptions,
-	): Promise<{ data: IBinaryData }> {
-		const binary = await convertToBinaryData(translationPlain);
+	): { data: IBinaryData } {
+		const binary = translationPlain.toString('base64');
 		const name = getFileNameWithoutExtension(documentName);
 
 		// Handle PDF translation default format
@@ -176,13 +139,13 @@ class LaraTranslateServices {
 			extension = PdfTranslationExtensions.DOCX;
 		}
 
-		const resolvedMimeType = (lookupMimeType(extension) || 'application/octet-stream') as string;
+		const resolvedMimeType = lookupMimeType(extension);
 
 		return {
 			data: {
 				data: binary,
 				mimeType: resolvedMimeType,
-				fileName: name,
+				fileName: `${name}.${extension}`,
 				fileExtension: extension,
 			} as IBinaryData,
 		};

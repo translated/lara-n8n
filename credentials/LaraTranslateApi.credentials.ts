@@ -4,6 +4,7 @@ export class LaraTranslateApi implements ICredentialType {
 	name = 'laraTranslateApi';
 	displayName = 'Lara Translate API';
 	documentationUrl = 'https://developers.laratranslate.com';
+	testedBy = 'laraApiCredentialTest';
 	properties: INodeProperties[] = [
 		{
 			displayName: 'Access Key ID',

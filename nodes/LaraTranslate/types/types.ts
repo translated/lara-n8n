@@ -1,5 +1,32 @@
-import { TranslationStyle } from '@translated/lara/lib/translator/models';
 import { PdfTranslationExtensions } from './enums';
+
+export type TranslationStyle = 'faithful' | 'fluid' | 'creative';
+
+export interface NGMemoryMatch {
+	memory: string;
+	tuid?: string;
+	language: [string, string];
+	sentence: string;
+	translation: string;
+	score: number;
+}
+
+export interface NGGlossaryMatch {
+	glossary: string;
+	language: [string, string];
+	term: string;
+	translation: string;
+}
+
+export interface TextResult {
+	readonly contentType: string;
+	readonly sourceLanguage: string;
+	readonly translation: string;
+	readonly adaptedTo?: string[];
+	readonly glossaries?: string[];
+	readonly adaptedToMatches?: NGMemoryMatch[] | NGMemoryMatch[][];
+	readonly glossariesMatches?: NGGlossaryMatch[] | NGGlossaryMatch[][];
+}
 
 export type LaraTranslateAdditionalOptions = {
 	instructions?: string[];
@@ -12,12 +39,6 @@ export type LaraTranslateAdditionalOptions = {
 	cacheTtl?: number;
 	noTrace?: boolean;
 	outputFormat?: PdfTranslationExtensions.PDF;
-	password?: string;
-};
-
-export type LaraCredentials = {
-	LARA_ACCESS_KEY_ID: string;
-	LARA_ACCESS_KEY_SECRET: string;
 };
 
 export type SupportedFileFormat = {

@@ -3,7 +3,7 @@ import { LaraTranslateAdditionalOptions } from '../types/types';
 import LaraTranslateServices from '../services/TranslateService';
 import { validateTextInput } from '../utils/validators';
 import { createLaraError } from '../utils/utils';
-import { Translator } from '@translated/lara';
+import { LaraApiClient } from '../services/LaraApiClient';
 
 /**
  * Executes text translation for a single item
@@ -12,7 +12,7 @@ import { Translator } from '@translated/lara';
 export async function executeTextTranslation(
 	context: IExecuteFunctions,
 	itemIndex: number,
-	lara: Translator,
+	lara: LaraApiClient,
 	source: string,
 	target: string,
 ): Promise<INodeExecutionData[]> {
