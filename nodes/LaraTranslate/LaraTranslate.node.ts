@@ -101,7 +101,10 @@ export class LaraTranslate implements INodeType {
 					});
 
 					if (!response.ok) {
-						throw new Error(`HTTP ${response.status}`);
+						throw new NodeOperationError(
+							{ id: '', name: 'Lara Translate', type: 'n8n-nodes-lara-translate.laraTranslate', typeVersion: 1, position: [0, 0], parameters: {} } as any,
+							`HTTP ${response.status}`,
+						);
 					}
 
 					return {
