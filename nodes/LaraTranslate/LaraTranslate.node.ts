@@ -101,10 +101,13 @@ export class LaraTranslate implements INodeType {
 					});
 
 					if (!response.ok) {
-						throw new NodeOperationError(
-							{ id: '', name: 'Lara Translate', type: 'n8n-nodes-lara-translate.laraTranslate', typeVersion: 1, position: [0, 0], parameters: {} } as any,
-							`HTTP ${response.status}`,
-						);
+						let detail = '';
+						try {
+							const body = await response.json() as { message?: string };
+							if (body.message) detail = `: ${body.message}`;
+						} catch {}
+						// eslint-disable-next-line n8n-nodes-base/node-execute-block-wrong-error-thrown
+						throw new Error(`Failed to authenticate with Lara API: HTTP ${response.status}${detail}`);
 					}
 
 					return {
