@@ -90,17 +90,19 @@ export class LaraTranslate implements INodeType {
 						.update(challenge)
 						.digest('base64');
 
-					await this.helpers.request({
+					const response = await fetch('https://api.laratranslate.com/memories', {
 						method: 'POST',
-						uri: 'https://api.laratranslate.com/memories',
 						headers: {
 							'X-HTTP-Method-Override': method,
 							'X-Lara-Date': date,
 							'Content-Type': contentType,
 							Authorization: `Lara ${accessKeyId}:${signature}`,
 						},
-						json: true,
 					});
+
+					if (!response.ok) {
+						throw new Error(`HTTP ${response.status}`);
+					}
 
 					return {
 						status: 'OK',
