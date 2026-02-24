@@ -53,7 +53,7 @@ export function validateBinaryInput(binaryData: any, binaryPropertyName: string)
 		throw new Error(`No binary data found in property '${binaryPropertyName}'`);
 	}
 
-	if (!binaryData.data) {
+	if (!binaryData.data && !binaryData.id) {
 		throw new Error(`Binary property '${binaryPropertyName}' does not contain valid data`);
 	}
 }

@@ -172,7 +172,7 @@ describe('LaraTranslateServices', () => {
 					target: 'it',
 					options: {},
 				}),
-			).rejects.toThrow('No text to translate');
+			).rejects.toThrow('Text to translate cannot be empty');
 		});
 
 		it('throws on whitespace-only text', async () => {
@@ -184,7 +184,7 @@ describe('LaraTranslateServices', () => {
 					target: 'it',
 					options: {},
 				}),
-			).rejects.toThrow('No text to translate');
+			).rejects.toThrow('Text to translate cannot be empty');
 		});
 	});
 

@@ -71,7 +71,11 @@ describe('validateBinaryInput', () => {
 		);
 	});
 
-	it('should throw for binary data missing .data property', () => {
+	it('should pass for filesystem-backed binary data with .id', () => {
+		expect(() => validateBinaryInput({ id: 'some-uuid' }, 'data')).not.toThrow();
+	});
+
+	it('should throw for binary data missing both .data and .id', () => {
 		expect(() => validateBinaryInput({ nodata: true }, 'myProp')).toThrow(
 			"Binary property 'myProp' does not contain valid data",
 		);

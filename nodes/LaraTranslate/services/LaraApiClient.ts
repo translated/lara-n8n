@@ -309,7 +309,7 @@ export class LaraApiClient {
 			}
 		}
 
-		throw new Error('TimeoutError: Document translation timed out after 15 minutes');
+		throw new Error(`TimeoutError: Document ${documentId} translation timed out after 15 minutes`);
 	}
 
 	/**

@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      n8n-workflow:
-        specifier: '*'
-        version: 1.82.0
     devDependencies:
       '@types/node':
         specifier: ^25.2.3
@@ -33,6 +29,9 @@ importers:
       link:
         specifier: ^2.1.1
         version: 2.1.1
+      n8n-workflow:
+        specifier: '*'
+        version: 1.82.0
       prettier:
         specifier: ^3.5.3
         version: 3.6.2

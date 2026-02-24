@@ -73,7 +73,7 @@ export class OptionsProcessor {
 
 		for (const field of scalarFields) {
 			if (options[field] !== undefined) {
-				result[field] = options[field] as any;
+				(result as Record<string, unknown>)[field] = options[field];
 			}
 		}
 

@@ -6,6 +6,7 @@ import { LaraApiClient } from './LaraApiClient';
 import { OptionsProcessor } from './OptionsProcessor';
 import { getFileExtension, getFileNameWithoutExtension } from '../utils/utils';
 import { lookupMimeType } from '../utils/mimeTypes';
+import { validateTextInput } from '../utils/validators';
 
 /**
  * Main service class for Lara Translate operations
@@ -80,9 +81,7 @@ class LaraTranslateServices {
 		target: string;
 		options: LaraTranslateAdditionalOptions;
 	}): Promise<TextResult> {
-		if (data.text.trim().length === 0) {
-			throw new Error('No text to translate');
-		}
+		validateTextInput(data.text);
 
 		const translateOptions = OptionsProcessor.process(data.options);
 

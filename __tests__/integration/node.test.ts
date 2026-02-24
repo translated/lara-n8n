@@ -110,7 +110,7 @@ describe('Node Integration - Full Execution Flow', () => {
 					target: 'it',
 					options: {},
 				}),
-			).rejects.toThrow('No text to translate');
+			).rejects.toThrow('Text to translate cannot be empty');
 		});
 
 		it('should handle API errors gracefully', async () => {
