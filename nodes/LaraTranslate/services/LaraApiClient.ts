@@ -1,4 +1,4 @@
-import { createHash, createHmac } from 'node:crypto';
+import { createHash, createHmac, randomBytes } from 'node:crypto';
 import { IHttpRequestOptions } from 'n8n-workflow';
 import { LaraTranslateAdditionalOptions, TextResult } from '../types/types';
 import { DocumentStatus } from '../types/enums';
@@ -54,7 +54,7 @@ function buildMultipartBody(
 	for (const [key, value] of Object.entries(fields)) {
 		parts.push(
 			Buffer.from(
-				`--${boundary}\r\nContent-Disposition: form-data; name="${sanitizeHeaderValue(key)}"\r\n\r\n${value}\r\n`,
+				`--${boundary}\r\nContent-Disposition: form-data; name="${sanitizeHeaderValue(key)}"\r\n\r\n${sanitizeHeaderValue(value)}\r\n`,
 			),
 		);
 	}
@@ -234,7 +234,7 @@ export class LaraApiClient {
 		})) as { url: string; fields: Record<string, string> };
 
 		// Step 2: Upload file to S3
-		const boundary = `----LaraUpload${Date.now()}${Math.random().toString(36).substring(7)}`;
+		const boundary = `----LaraUpload${Date.now()}${randomBytes(16).toString('hex')}`;
 		const multipartBody = buildMultipartBody(
 			uploadInfo.fields,
 			'file',
@@ -272,21 +272,16 @@ export class LaraApiClient {
 				style: options.style,
 			},
 			extraHeaders,
-		)) as { id: string; status: string };
+		)) as { id: string; status: string; errorReason?: string };
 
 		// Step 4: Poll for translation completion
 		const documentId = document.id;
+		let currentStatus = document.status;
+		let currentErrorReason: string | undefined = document.errorReason;
 		const start = Date.now();
 
 		while (Date.now() - start < MAX_POLL_TIME_MS) {
-			await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL_MS));
-
-			const status = (await this.request('GET', `/documents/${documentId}`)) as {
-				status: string;
-				errorReason?: string;
-			};
-
-			if (status.status === DocumentStatus.TRANSLATED) {
+			if (currentStatus === DocumentStatus.TRANSLATED) {
 				// Step 5: Get download URL
 				const downloadInfo = (await this.request(
 					'GET',
@@ -304,9 +299,18 @@ export class LaraApiClient {
 				} as IHttpRequestOptions)) as Buffer;
 			}
 
-			if (status.status === DocumentStatus.ERROR) {
-				throw new Error(`DocumentError: ${status.errorReason || 'Unknown document error'}`);
+			if (currentStatus === DocumentStatus.ERROR) {
+				throw new Error(`DocumentError: ${currentErrorReason || 'Unknown document error'}`);
 			}
+
+			await new Promise((resolve) => setTimeout(resolve, POLLING_INTERVAL_MS));
+
+			const polled = (await this.request('GET', `/documents/${documentId}`)) as {
+				status: string;
+				errorReason?: string;
+			};
+			currentStatus = polled.status;
+			currentErrorReason = polled.errorReason;
 		}
 
 		throw new Error(`TimeoutError: Document ${documentId} translation timed out after 15 minutes`);
