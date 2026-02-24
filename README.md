@@ -4,7 +4,7 @@
 
 Official n8n community node for [Lara Translate](https://laratranslate.com), enabling powerful translation capabilities with support for language detection, context-aware translations, translation memories and glossaries.
 
-[![Version](https://img.shields.io/badge/version-0.1.2-blue.svg)](https://github.com/translated/lara-n8n)
+[![Version](https://img.shields.io/badge/version-0.2.0-blue.svg)](https://github.com/translated/lara-n8n)
 [![n8n Community Node](https://img.shields.io/badge/n8n-Community%20Node-blueviolet.svg)](https://www.npmjs.com/package/n8n-nodes-lara-translate)
 
 </div>

@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { LaraApiClient } from '../../nodes/LaraTranslate/services/LaraApiClient';
 import LaraTranslateServices from '../../nodes/LaraTranslate/services/TranslateService';
 
 describe('Node Integration - Full Execution Flow', () => {
