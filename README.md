@@ -4,7 +4,7 @@
 
 Official n8n community node for [Lara Translate](https://laratranslate.com), enabling powerful translation capabilities with support for language detection, context-aware translations, translation memories and glossaries.
 
-[![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)](https://github.com/translated/lara-n8n)
+[![Version](https://img.shields.io/badge/version-1.0.4-blue.svg)](https://github.com/translated/lara-n8n)
 [![n8n Community Node](https://img.shields.io/badge/n8n-Community%20Node-blueviolet.svg)](https://www.npmjs.com/package/n8n-nodes-lara-translate)
 
 </div>
@@ -67,7 +67,7 @@ The first time you use the node, you need to configure your credentials:
 
 ### Step 3: Choose What to Translate
 
-The node offers **2 translation modes**:
+The node offers **2 translation modes** and can also be used as an **AI Agent tool**:
 
 #### 🔤 **Translate Text** - For texts and short content
 
@@ -89,6 +89,10 @@ Perfect for translating:
 - Documents while maintaining original formatting
 
 **Practical example**: Automatically translate documents uploaded by users and save them to a specific folder.
+
+#### 🤖 **AI Agent Tool** - For autonomous translation
+
+The Lara Translate node can be used as a tool in n8n AI Agent workflows. This allows an AI agent to decide when to translate content as part of a larger automated process — perfect for multilingual chatbots and automated support pipelines. See the [Configuration Guide](docs/config/configuration.md#ai-agent-workflows) for setup details.
 
 ### Step 4: Configure the Translation
 
