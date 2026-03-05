@@ -93,7 +93,7 @@ The translated document is returned as binary data under the `data` property:
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `data` | Buffer | The translated document file content. |
+| `data` | string (base64) | The translated document file content as a base64-encoded string. |
 | `mimeType` | string | The MIME type of the translated document (e.g., `application/vnd.openxmlformats-officedocument.wordprocessingml.document`). |
 | `fileName` | string | The filename of the translated document. |
 | `fileExtension` | string | The file extension (e.g., `docx`, `pdf`). |
