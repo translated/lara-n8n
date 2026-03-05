@@ -37,9 +37,9 @@ These options are available under the **Additional Options** and **Additional Op
 
 ### Output Format
 
-**Type**: options — **Default**: `pdf`
+**Type**: options
 
-This option is only relevant when translating PDF files. By default, PDF files are translated and returned as DOCX. To receive a PDF back, explicitly set the output format to `pdf`.
+This option is only relevant when translating PDF files. By default, PDF files are translated and returned as DOCX. To receive a PDF back, add this option from Additional Options and select `pdf`.
 
 For all other file formats (DOCX, XLSX, PPTX, HTML, etc.), the translated document is returned in the same format as the source.
 
