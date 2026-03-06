@@ -4,7 +4,7 @@
 
 Official n8n community node for [Lara Translate](https://laratranslate.com), enabling powerful translation capabilities with support for language detection, context-aware translations, translation memories and glossaries.
 
-[![Version](https://img.shields.io/badge/version-1.0.4-blue.svg)](https://github.com/translated/lara-n8n)
+[![Version](https://img.shields.io/badge/version-1.0.5-blue.svg)](https://github.com/translated/lara-n8n)
 [![n8n Community Node](https://img.shields.io/badge/n8n-Community%20Node-blueviolet.svg)](https://www.npmjs.com/package/n8n-nodes-lara-translate)
 
 </div>
@@ -14,6 +14,7 @@ Official n8n community node for [Lara Translate](https://laratranslate.com), ena
 ## 📑 Table of Contents
 
 - [Requirements](#requirements)
+- [Features](#features)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Documentation](#documentation)
@@ -26,6 +27,18 @@ Official n8n community node for [Lara Translate](https://laratranslate.com), ena
 - **n8n** - Installed globally (`npm install -g n8n`)
 - **nvm** (optional) - Node version manager for easy Node.js version switching 
 - **Lara Translate API credentials** (Access Key ID and Access Key Secret)
+
+## ✨ Features
+
+- **Translate Text** — Translate plain text and XLIFF content with support for 200+ languages and automatic language detection
+- **Translate Document** — Translate files (PDF, DOCX, XLSX, PPTX, HTML, XML) while preserving original formatting
+- **AI Agent Tool** — Use as a tool in n8n AI Agent workflows for autonomous, context-driven translations
+- **Instructions** — Guide translations with natural-language directives to control formality, tone, terminology, and style
+- **Translation Memories** — Leverage previously approved translations for consistent voice and style across all your content
+- **Glossaries** — Enforce specific term translations to ensure consistency for brand names, jargon, and domain-specific vocabulary
+- **Translation Styles** — Choose between faithful, fluid, or creative translation approaches to match your content type
+- **No Trace Mode** — Translate sensitive content without storing data on Lara's servers
+- **Caching** — Cache translations for identical requests to reduce API calls and improve response times
 
 ## Installation
 
