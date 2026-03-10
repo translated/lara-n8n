@@ -205,23 +205,24 @@ These are standardized language tags defined by BCP 47, combining ISO 639-1 lang
 | sl-SI       | Slovenian                             | sm-WS       | Samoan                               |
 | sn-ZW       | Shona                                 | so-SO       | Somali                               |
 | sq-AL       | Albanian                              | sr-Cyrl-RS  | Serbian (Cyrillic script)             |
-| sr-Latn-RS  | Serbian (Latin script)                 | ss-SZ       | Swati                                |
-| st-LS       | Southern Sotho                        | su-ID       | Sundanese                            |
-| sv-SE       | Swedish                               | sw-KE       | Swahili                              |
-| szl-PL      | Silesian                              | ta-IN       | Tamil                                |
-| taq-ML      | Tamasheq                              | te-IN       | Telugu                               |
-| tg-TJ       | Tajik                                 | th-TH       | Thai                                 |
-| ti-ET       | Tigrinya                              | tk-TM       | Turkmen                              |
-| tl-PH       | Tagalog                               | tn-ZA       | Tswana                               |
-| tpi-PG      | Tok Pisin                             | tr-TR       | Turkish                              |
-| ts-ZA       | Tsonga                                | tt-RU       | Tatar                                |
-| tum-MW      | Tumbuka                               | tw-GH       | Twi                                  |
-| tzm-MA      | Central Atlas Tamazight               | ug-CN       | Uyghur                               |
-| uk-UA       | Ukrainian                             | umb-AO      | Umbundu                              |
-| ur-PK       | Urdu                                  | uzn-UZ      | Uzbek                                |
-| vec-IT      | Venetian                              | vi-VN       | Vietnamese                           |
-| vls-BE      | West Flemish                          | war-PH      | Waray                                |
-| wo-SN       | Wolof                                 | xh-ZA       | Xhosa                                |
-| ydd-US      | Yiddish                               | yo-NG       | Yoruba                               |
-| zh-CN       | Chinese (Simplified)                  | zh-HK       | Chinese (Traditional, Hong Kong)     |
-| zh-TW       | Chinese (Traditional)                 | zu-ZA       | Zulu                                 |
+| sr-Latn-RS  | Serbian (Latin script)                 | sr-ME       | Montenegrin                          |
+| ss-SZ       | Swati                                 | st-LS       | Southern Sotho                       |
+| su-ID       | Sundanese                             | sv-SE       | Swedish                              |
+| sw-KE       | Swahili                               | szl-PL      | Silesian                             |
+| ta-IN       | Tamil                                 | taq-ML      | Tamasheq                             |
+| te-IN       | Telugu                                | tg-TJ       | Tajik                                |
+| th-TH       | Thai                                  | ti-ET       | Tigrinya                             |
+| tk-TM       | Turkmen                               | tl-PH       | Tagalog                              |
+| tn-ZA       | Tswana                                | tpi-PG      | Tok Pisin                            |
+| tr-TR       | Turkish                               | ts-ZA       | Tsonga                               |
+| tt-RU       | Tatar                                 | tum-MW      | Tumbuka                              |
+| tw-GH       | Twi                                   | tzm-MA      | Central Atlas Tamazight              |
+| ug-CN       | Uyghur                                | uk-UA       | Ukrainian                            |
+| umb-AO      | Umbundu                               | ur-PK       | Urdu                                 |
+| uzn-UZ      | Uzbek                                 | vec-IT      | Venetian                             |
+| vi-VN       | Vietnamese                            | vls-BE      | West Flemish                         |
+| war-PH      | Waray                                 | wo-SN       | Wolof                                |
+| xh-ZA       | Xhosa                                 | ydd-US      | Yiddish                              |
+| yo-NG       | Yoruba                                | zh-CN       | Chinese (Simplified)                 |
+| zh-HK       | Chinese (Traditional, Hong Kong)      | zh-TW       | Chinese (Traditional)                |
+| zu-ZA       | Zulu                                  |
