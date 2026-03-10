@@ -8,3 +8,4 @@ yarn.lock
 .vscode/launch.json
 .idea
 .claude
+claude.md
