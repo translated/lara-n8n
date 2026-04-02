@@ -1,5 +1,6 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { createHmac } from 'node:crypto';
+import { LaraTranslateApi } from '../../credentials/LaraTranslateApi.credentials';
 
 describe('Credential Test - HMAC-SHA256 Signing', () => {
 	const accessKeyId = 'test-access-key-id';
@@ -55,83 +56,80 @@ describe('Credential Test - HMAC-SHA256 Signing', () => {
 
 		expect(authHeader).toMatch(/^Lara test-access-key-id:.{44}$/);
 	});
+});
 
-	it('should build correct request options for credential test', () => {
-		const date = new Date().toUTCString();
-		const method = 'GET';
-		const path = '/memories';
-		const contentType = 'application/json';
+describe('LaraTranslateApi credential class', () => {
+	const cred = new LaraTranslateApi();
 
-		const challenge = `${method}\n${path}\n\n${contentType}\n${date}`;
-		const signature = createHmac('sha256', accessKeySecret)
-			.update(challenge)
-			.digest('base64');
-
-		const requestOptions = {
-			method: 'POST' as const,
-			uri: 'https://api.laratranslate.com/memories',
-			headers: {
-				'X-HTTP-Method-Override': method,
-				'X-Lara-Date': date,
-				'Content-Type': contentType,
-				Authorization: `Lara ${accessKeyId}:${signature}`,
-			},
-			json: true,
-		};
-
-		expect(requestOptions.method).toBe('POST');
-		expect(requestOptions.uri).toBe('https://api.laratranslate.com/memories');
-		expect(requestOptions.headers['X-HTTP-Method-Override']).toBe('GET');
-		expect(requestOptions.headers['X-Lara-Date']).toBe(date);
-		expect(requestOptions.headers['Content-Type']).toBe('application/json');
-		expect(requestOptions.headers.Authorization).toContain('Lara test-access-key-id:');
-		expect(requestOptions.json).toBe(true);
+	describe('test property', () => {
+		it('should define a valid test request', () => {
+			expect(cred.test).toBeDefined();
+			expect(cred.test!.request.url).toBe('/memories');
+			expect(cred.test!.request.method).toBe('POST');
+			expect(cred.test!.request.baseURL).toBe('https://api.laratranslate.com');
+		});
 	});
 
-	it('should handle credential test success flow', async () => {
-		const mockRequest = vi.fn().mockResolvedValue([{ id: 'mem-1', name: 'Test Memory' }]);
+	describe('authenticate()', () => {
+		it('should inject correct auth headers into request options', async () => {
+			const result = await cred.authenticate(
+				{ accessKeyId: 'test-key', accessKeySecret: 'test-secret' },
+				{
+					url: '/memories',
+					method: 'POST',
+					headers: {
+						'X-HTTP-Method-Override': 'GET',
+						'Content-Type': 'application/json',
+					},
+				},
+			);
 
-		const date = new Date().toUTCString();
-		const challenge = `GET\n/memories\n\napplication/json\n${date}`;
-		const signature = createHmac('sha256', accessKeySecret)
-			.update(challenge)
-			.digest('base64');
-
-		await mockRequest({
-			method: 'POST',
-			uri: 'https://api.laratranslate.com/memories',
-			headers: {
-				'X-HTTP-Method-Override': 'GET',
-				'X-Lara-Date': date,
-				'Content-Type': 'application/json',
-				Authorization: `Lara ${accessKeyId}:${signature}`,
-			},
-			json: true,
+			expect(result.headers?.Authorization).toMatch(/^Lara test-key:.{44}$/);
+			expect(result.headers?.['X-Lara-Date']).toBeDefined();
+			expect(result.headers?.['X-HTTP-Method-Override']).toBe('GET');
+			expect(result.headers?.['Content-Type']).toBe('application/json');
 		});
 
-		expect(mockRequest).toHaveBeenCalledTimes(1);
-		const callArgs = mockRequest.mock.calls[0][0];
-		expect(callArgs.headers.Authorization).toMatch(/^Lara .+:.+$/);
+		it('should use GET as default logical method when no override header', async () => {
+			const result = await cred.authenticate(
+				{ accessKeyId: 'key', accessKeySecret: 'secret' },
+				{
+					url: '/test',
+					method: 'POST',
+					headers: {},
+				},
+			);
+
+			expect(result.headers?.Authorization).toMatch(/^Lara key:/);
+			expect(result.headers?.['X-Lara-Date']).toBeDefined();
+		});
+
+		it('should produce different signatures for different credentials', async () => {
+			const opts = {
+				url: '/memories',
+				method: 'POST' as const,
+				headers: {
+					'X-HTTP-Method-Override': 'GET',
+					'Content-Type': 'application/json',
+				},
+			};
+
+			const result1 = await cred.authenticate(
+				{ accessKeyId: 'key1', accessKeySecret: 'secret1' },
+				{ ...opts, headers: { ...opts.headers } },
+			);
+			const result2 = await cred.authenticate(
+				{ accessKeyId: 'key2', accessKeySecret: 'secret2' },
+				{ ...opts, headers: { ...opts.headers } },
+			);
+
+			expect(result1.headers?.Authorization).not.toBe(result2.headers?.Authorization);
+		});
 	});
 
-	it('should handle credential test failure flow', async () => {
-		const mockRequest = vi.fn().mockRejectedValue(new Error('401 Unauthorized'));
-
-		try {
-			await mockRequest({
-				method: 'POST',
-				uri: 'https://api.laratranslate.com/memories',
-				headers: {},
-				json: true,
-			});
-		} catch (error) {
-			const message = error instanceof Error ? error.message : String(error);
-			const result = {
-				status: 'Error' as const,
-				message,
-			};
-			expect(result.status).toBe('Error');
-			expect(result.message).toBe('401 Unauthorized');
-		}
+	describe('icon', () => {
+		it('should have an icon defined', () => {
+			expect(cred.icon).toBe('file:LaraLogo.svg');
+		});
 	});
 });
