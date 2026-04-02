@@ -58,16 +58,15 @@ export class LaraTranslateApi implements ICredentialType {
 		const contentType =
 			(requestOptions.headers?.['Content-Type'] as string) || 'application/json';
 
-		// Lara API sends all requests as POST with X-HTTP-Method-Override for the logical method
+		// Lara API infra doesn't support all HTTP methods; actual method rides in this header
 		const logicalMethod =
 			(requestOptions.headers?.['X-HTTP-Method-Override'] as string) ||
 			requestOptions.method ||
 			'GET';
 
 		const path = requestOptions.url;
-		const contentMd5 = '';
-
-		const challenge = `${logicalMethod}\n${path}\n${contentMd5}\n${contentType}\n${date}`;
+		// Content-MD5 is empty for bodiless requests; body signing is handled by LaraApiClient
+		const challenge = `${logicalMethod}\n${path}\n\n${contentType}\n${date}`;
 		const signature = createHmac('sha256', accessKeySecret)
 			.update(challenge)
 			.digest('base64');
