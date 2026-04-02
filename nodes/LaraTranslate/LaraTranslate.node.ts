@@ -1,17 +1,12 @@
 import {
-	ICredentialTestFunctions,
-	ICredentialsDecrypted,
-	ICredentialDataDecryptedObject,
 	IExecuteFunctions,
 	ILoadOptionsFunctions,
-	INodeCredentialTestResult,
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
 	NodeConnectionType,
 	NodeOperationError,
 } from 'n8n-workflow';
-import { createHmac } from 'node:crypto';
 
 import {
 	genericAdvancedOptions,
@@ -70,58 +65,6 @@ export class LaraTranslate implements INodeType {
 	};
 
 	methods = {
-		credentialTest: {
-			async laraApiCredentialTest(
-				this: ICredentialTestFunctions,
-				credential: ICredentialsDecrypted<ICredentialDataDecryptedObject>,
-			): Promise<INodeCredentialTestResult> {
-				try {
-					const { accessKeyId, accessKeySecret } = credential.data as {
-						accessKeyId: string;
-						accessKeySecret: string;
-					};
-
-					const method = 'GET';
-					const path = '/memories';
-					const contentType = 'application/json';
-					const date = new Date().toUTCString();
-					const challenge = `${method}\n${path}\n\n${contentType}\n${date}`;
-					const signature = createHmac('sha256', accessKeySecret)
-						.update(challenge)
-						.digest('base64');
-
-					const response = await fetch('https://api.laratranslate.com/memories', {
-						method: 'POST',
-						headers: {
-							'X-HTTP-Method-Override': method,
-							'X-Lara-Date': date,
-							'Content-Type': contentType,
-							Authorization: `Lara ${accessKeyId}:${signature}`,
-						},
-					});
-
-					if (!response.ok) {
-						let detail = '';
-						try {
-							const body = await response.json() as { message?: string };
-							if (body.message) detail = `: ${body.message}`;
-						} catch {}
-						// eslint-disable-next-line n8n-nodes-base/node-execute-block-wrong-error-thrown
-						throw new Error(`Failed to authenticate with Lara API: HTTP ${response.status}${detail}`);
-					}
-
-					return {
-						status: 'OK',
-						message: 'Connection successful!',
-					};
-				} catch (error) {
-					return {
-						status: 'Error',
-						message: getErrorMessage(error),
-					};
-				}
-			},
-		},
 		loadOptions: {
 			async getGlossaries(this: ILoadOptionsFunctions) {
 				try {
