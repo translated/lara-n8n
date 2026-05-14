@@ -134,52 +134,32 @@ describe('LaraApiClient', () => {
 				headers: { 'x-request-id': 'abc123' },
 			});
 
-			await expect(client.translate('Hello', 'en', 'it', {})).rejects.toThrow(
-				'AuthenticationError: Invalid credentials',
-			);
+			const error = await client
+				.translate('Hello', 'en', 'it', {})
+				.catch((e: unknown) => e);
 
-			mockHttpRequest.mockResolvedValueOnce({
-				statusCode: 401,
-				body: errorBody,
-				headers: { 'x-request-id': 'abc123' },
-			});
-
-			try {
-				await client.translate('Hello', 'en', 'it', {});
-				expect.fail('Should have thrown');
-			} catch (error) {
-				expect(error).toBeInstanceOf(LaraApiHttpError);
-				const httpError = error as LaraApiHttpError;
-				expect(httpError.statusCode).toBe(401);
-				expect(httpError.body).toEqual(errorBody);
-				expect(httpError.headers).toEqual({ 'x-request-id': 'abc123' });
-			}
+			expect(error).toBeInstanceOf(LaraApiHttpError);
+			const httpError = error as LaraApiHttpError;
+			expect(httpError.message).toContain('AuthenticationError: Invalid credentials');
+			expect(httpError.statusCode).toBe(401);
+			expect(httpError.body).toEqual(errorBody);
+			expect(httpError.headers).toEqual({ 'x-request-id': 'abc123' });
 		});
 
 		it('throws LaraApiHttpError on HTTP 500 error with unknown error format', async () => {
 			mockHttpRequest.mockResolvedValueOnce({
 				statusCode: 500,
-				body: {
-					error: {},
-				},
-			});
-
-			await expect(client.translate('Hello', 'en', 'it', {})).rejects.toThrow(
-				'UnknownError: HTTP 500',
-			);
-
-			mockHttpRequest.mockResolvedValueOnce({
-				statusCode: 500,
 				body: { error: {} },
 			});
 
-			try {
-				await client.translate('Hello', 'en', 'it', {});
-				expect.fail('Should have thrown');
-			} catch (error) {
-				expect(error).toBeInstanceOf(LaraApiHttpError);
-				expect((error as LaraApiHttpError).statusCode).toBe(500);
-			}
+			const error = await client
+				.translate('Hello', 'en', 'it', {})
+				.catch((e: unknown) => e);
+
+			expect(error).toBeInstanceOf(LaraApiHttpError);
+			const httpError = error as LaraApiHttpError;
+			expect(httpError.message).toContain('UnknownError: HTTP 500');
+			expect(httpError.statusCode).toBe(500);
 		});
 
 		it('throws LaraApiHttpError on non-JSON error response', async () => {
@@ -188,24 +168,15 @@ describe('LaraApiClient', () => {
 				body: 'Bad Gateway',
 			});
 
-			await expect(client.translate('Hello', 'en', 'it', {})).rejects.toThrow(
-				'ApiError: HTTP 502 - Bad Gateway',
-			);
+			const error = await client
+				.translate('Hello', 'en', 'it', {})
+				.catch((e: unknown) => e);
 
-			mockHttpRequest.mockResolvedValueOnce({
-				statusCode: 502,
-				body: 'Bad Gateway',
-			});
-
-			try {
-				await client.translate('Hello', 'en', 'it', {});
-				expect.fail('Should have thrown');
-			} catch (error) {
-				expect(error).toBeInstanceOf(LaraApiHttpError);
-				const httpError = error as LaraApiHttpError;
-				expect(httpError.statusCode).toBe(502);
-				expect(httpError.body).toBe('Bad Gateway');
-			}
+			expect(error).toBeInstanceOf(LaraApiHttpError);
+			const httpError = error as LaraApiHttpError;
+			expect(httpError.message).toContain('ApiError: HTTP 502 - Bad Gateway');
+			expect(httpError.statusCode).toBe(502);
+			expect(httpError.body).toBe('Bad Gateway');
 		});
 
 		it('maps camelCase options to snake_case body params', async () => {

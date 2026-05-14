@@ -1,14 +1,9 @@
-import {
-	IExecuteFunctions,
-	INodeExecutionData,
-	JsonObject,
-	NodeApiError,
-	NodeOperationError,
-} from 'n8n-workflow';
+import { IExecuteFunctions, INodeExecutionData, NodeOperationError } from 'n8n-workflow';
 import { LaraTranslateAdditionalOptions } from '../types/types';
 import LaraTranslateServices from '../services/TranslateService';
 import { validateTextInput } from '../utils/validators';
 import { createLaraError } from '../utils/utils';
+import { wrapLaraHttpError } from '../utils/errors';
 import { LaraApiClient, LaraApiHttpError } from '../services/LaraApiClient';
 
 /**
@@ -61,11 +56,7 @@ export async function executeTextTranslation(
 		);
 	} catch (error) {
 		if (error instanceof LaraApiHttpError) {
-			throw new NodeApiError(context.getNode(), error as unknown as JsonObject, {
-				itemIndex,
-				message: error.message,
-				httpCode: String(error.statusCode),
-			});
+			throw wrapLaraHttpError(context.getNode(), itemIndex, error);
 		}
 		throw new NodeOperationError(context.getNode(), createLaraError(error, 'text translation'), {
 			itemIndex,

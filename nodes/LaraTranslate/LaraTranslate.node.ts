@@ -4,7 +4,6 @@ import {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
-	JsonObject,
 	NodeApiError,
 	NodeConnectionType,
 	NodeOperationError,
@@ -19,10 +18,10 @@ import {
 } from './config/nodeDescription';
 import LaraTranslateServices from './services/TranslateService';
 import { validateLanguages } from './utils/validators';
-import { getErrorMessage } from './utils/utils';
 import { executeTextTranslation } from './executors/TextTranslationExecutor';
 import { executeDocumentTranslation } from './executors/DocumentTranslationExecutor';
 import { LaraApiHttpError } from './services/LaraApiClient';
+import { buildContinueOnFailJson, wrapLaraHttpError } from './utils/errors';
 
 export class LaraTranslate implements INodeType {
 	description: INodeTypeDescription = {
@@ -169,7 +168,7 @@ export class LaraTranslate implements INodeType {
 			} catch (error) {
 				if (this.continueOnFail()) {
 					const executionErrorData = this.helpers.constructExecutionMetaData(
-						[{ json: { error: getErrorMessage(error) } }],
+						[{ json: buildContinueOnFailJson(error) }],
 						{ itemData: { item: i } },
 					);
 					returnData.push(...executionErrorData);
@@ -182,11 +181,7 @@ export class LaraTranslate implements INodeType {
 				}
 
 				if (error instanceof LaraApiHttpError) {
-					throw new NodeApiError(this.getNode(), error as unknown as JsonObject, {
-						itemIndex: i,
-						message: error.message,
-						httpCode: String(error.statusCode),
-					});
+					throw wrapLaraHttpError(this.getNode(), i, error);
 				}
 
 				throw new NodeOperationError(this.getNode(), error as Error, {
