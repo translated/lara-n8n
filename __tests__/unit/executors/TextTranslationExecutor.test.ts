@@ -132,27 +132,24 @@ describe('executeTextTranslation', () => {
 
 		const responseBody = { error: { type: 'RateLimit', message: 'Too many requests' } };
 		mockLara.translate.mockRejectedValueOnce(
-			new LaraApiHttpError(
-				429,
-				responseBody,
-				{ 'retry-after': '30' },
-				'RateLimit: Too many requests',
-			),
+			new LaraApiHttpError({
+				statusCode: 429,
+				body: responseBody,
+				headers: { 'retry-after': '30' },
+				message: 'RateLimit: Too many requests',
+			}),
 		);
 
-		try {
-			await executeTextTranslation(
-				mockContext,
-				0,
-				mockLara as unknown as LaraApiClient,
-				'en',
-				'it',
-			);
-			expect.fail('Should have thrown');
-		} catch (error) {
-			expect(error).toBeInstanceOf(NodeApiError);
-			expect((error as NodeApiError).message).toContain('Too many requests');
-		}
+		const error = await executeTextTranslation(
+			mockContext,
+			0,
+			mockLara as unknown as LaraApiClient,
+			'en',
+			'it',
+		).catch((e: unknown) => e);
+
+		expect(error).toBeInstanceOf(NodeApiError);
+		expect((error as NodeApiError).message).toContain('Too many requests');
 	});
 
 	it('includes error context in NodeOperationError message', async () => {

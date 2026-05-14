@@ -235,23 +235,25 @@ describe('executeDocumentTranslation', () => {
 
 		const responseBody = { error: { type: 'PayloadTooLarge', message: 'File exceeds 50MB' } };
 		mockLara.translateDocument.mockRejectedValueOnce(
-			new LaraApiHttpError(413, responseBody, {}, 'PayloadTooLarge: File exceeds 50MB'),
+			new LaraApiHttpError({
+				statusCode: 413,
+				body: responseBody,
+				headers: {},
+				message: 'PayloadTooLarge: File exceeds 50MB',
+			}),
 		);
 
-		try {
-			await executeDocumentTranslation(
-				mockContext,
-				0,
-				mockItems,
-				mockLara as unknown as LaraApiClient,
-				'en',
-				'it',
-			);
-			expect.fail('Should have thrown');
-		} catch (error) {
-			expect(error).toBeInstanceOf(NodeApiError);
-			expect((error as NodeApiError).message).toContain('File exceeds 50MB');
-		}
+		const error = await executeDocumentTranslation(
+			mockContext,
+			0,
+			mockItems,
+			mockLara as unknown as LaraApiClient,
+			'en',
+			'it',
+		).catch((e: unknown) => e);
+
+		expect(error).toBeInstanceOf(NodeApiError);
+		expect((error as NodeApiError).message).toContain('File exceeds 50MB');
 	});
 
 	it('includes error context in NodeOperationError message', async () => {

@@ -2,10 +2,6 @@ import { IDataObject, INode, JsonObject, NodeApiError } from 'n8n-workflow';
 import { LaraApiHttpError } from '../services/LaraApiClient';
 import { getErrorMessage } from './utils';
 
-/**
- * Wraps a LaraApiHttpError as a NodeApiError, preserving statusCode/body/headers
- * so n8n's UI can render structured HTTP error details.
- */
 export function wrapLaraHttpError(
 	node: INode,
 	itemIndex: number,
@@ -18,10 +14,6 @@ export function wrapLaraHttpError(
 	});
 }
 
-/**
- * Recovers the original LaraApiHttpError from a NodeApiError wrapper (via its `cause`),
- * or returns it directly if already a LaraApiHttpError.
- */
 function findLaraApiHttpError(error: unknown): LaraApiHttpError | undefined {
 	if (error instanceof LaraApiHttpError) return error;
 	const cause = (error as { cause?: unknown } | null)?.cause;
@@ -29,20 +21,17 @@ function findLaraApiHttpError(error: unknown): LaraApiHttpError | undefined {
 	return undefined;
 }
 
-/**
- * Builds the output JSON for items that fail when continueOnFail is enabled.
- * Preserves the HTTP context (statusCode/body/headers) when available so users
- * don't lose the structured error details that NodeApiError exposes in fail-fast mode.
- */
+// continueOnFail mode would otherwise flatten the failure to { error: message },
+// dropping the HTTP context that NodeApiError exposes in fail-fast mode.
 export function buildContinueOnFailJson(error: unknown): IDataObject {
 	const httpError = findLaraApiHttpError(error);
 	if (httpError) {
 		return {
 			error: httpError.message,
 			statusCode: httpError.statusCode,
-			body: httpError.body as IDataObject | string | null,
-			headers: httpError.headers as IDataObject | undefined,
-		};
+			body: httpError.body,
+			headers: httpError.headers,
+		} as IDataObject;
 	}
 	return { error: getErrorMessage(error) };
 }

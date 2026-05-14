@@ -20,8 +20,7 @@ import LaraTranslateServices from './services/TranslateService';
 import { validateLanguages } from './utils/validators';
 import { executeTextTranslation } from './executors/TextTranslationExecutor';
 import { executeDocumentTranslation } from './executors/DocumentTranslationExecutor';
-import { LaraApiHttpError } from './services/LaraApiClient';
-import { buildContinueOnFailJson, wrapLaraHttpError } from './utils/errors';
+import { buildContinueOnFailJson } from './utils/errors';
 
 export class LaraTranslate implements INodeType {
 	description: INodeTypeDescription = {
@@ -175,13 +174,8 @@ export class LaraTranslate implements INodeType {
 					continue;
 				}
 
-				// Already-wrapped n8n errors pass through unchanged
 				if (error instanceof NodeOperationError || error instanceof NodeApiError) {
 					throw error;
-				}
-
-				if (error instanceof LaraApiHttpError) {
-					throw wrapLaraHttpError(this.getNode(), i, error);
 				}
 
 				throw new NodeOperationError(this.getNode(), error as Error, {

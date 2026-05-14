@@ -70,21 +70,26 @@ function buildMultipartBody(
 	return Buffer.concat(parts);
 }
 
-/**
- * Error thrown when the Lara API responds with a non-2xx HTTP status.
- * Preserves the raw response so the executor boundary can hand it to NodeApiError,
- * which exposes statusCode/body/headers in n8n's UI.
- */
+export interface LaraApiHttpErrorInit {
+	statusCode: number;
+	body: unknown;
+	headers: Record<string, unknown> | undefined;
+	message: string;
+}
+
+// Custom error type so LaraApiClient stays decoupled from n8n-workflow; the executor
+// boundary unwraps these into NodeApiError so n8n's UI can render the HTTP details.
 export class LaraApiHttpError extends Error {
 	readonly name = 'LaraApiHttpError';
+	readonly statusCode: number;
+	readonly body: unknown;
+	readonly headers: Record<string, unknown> | undefined;
 
-	constructor(
-		readonly statusCode: number,
-		readonly body: unknown,
-		readonly headers: Record<string, unknown> | undefined,
-		message: string,
-	) {
+	constructor({ statusCode, body, headers, message }: LaraApiHttpErrorInit) {
 		super(message);
+		this.statusCode = statusCode;
+		this.body = body;
+		this.headers = headers;
 	}
 }
 
@@ -191,21 +196,21 @@ export class LaraApiClient {
 
 		// Handle non-JSON or unexpected error responses (e.g. 502 from load balancer)
 		if (typeof responseBody !== 'object' || responseBody === null) {
-			throw new LaraApiHttpError(
+			throw new LaraApiHttpError({
 				statusCode,
-				responseBody,
-				responseHeaders,
-				`ApiError: HTTP ${statusCode} - ${String(responseBody || 'No response body')}`,
-			);
+				body: responseBody,
+				headers: responseHeaders,
+				message: `ApiError: HTTP ${statusCode} - ${String(responseBody || 'No response body')}`,
+			});
 		}
 
 		const error = (responseBody as Record<string, any>).error || {};
-		throw new LaraApiHttpError(
+		throw new LaraApiHttpError({
 			statusCode,
-			responseBody,
-			responseHeaders,
-			`${error.type || 'UnknownError'}: ${error.message || `HTTP ${statusCode}`}`,
-		);
+			body: responseBody,
+			headers: responseHeaders,
+			message: `${error.type || 'UnknownError'}: ${error.message || `HTTP ${statusCode}`}`,
+		});
 	}
 
 	/**
