@@ -4,6 +4,7 @@ import {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
+	NodeApiError,
 	NodeConnectionType,
 	NodeOperationError,
 } from 'n8n-workflow';
@@ -17,9 +18,9 @@ import {
 } from './config/nodeDescription';
 import LaraTranslateServices from './services/TranslateService';
 import { validateLanguages } from './utils/validators';
-import { getErrorMessage } from './utils/utils';
 import { executeTextTranslation } from './executors/TextTranslationExecutor';
 import { executeDocumentTranslation } from './executors/DocumentTranslationExecutor';
+import { buildContinueOnFailJson } from './utils/errors';
 
 export class LaraTranslate implements INodeType {
 	description: INodeTypeDescription = {
@@ -166,15 +167,14 @@ export class LaraTranslate implements INodeType {
 			} catch (error) {
 				if (this.continueOnFail()) {
 					const executionErrorData = this.helpers.constructExecutionMetaData(
-						[{ json: { error: getErrorMessage(error) } }],
+						[{ json: buildContinueOnFailJson(error) }],
 						{ itemData: { item: i } },
 					);
 					returnData.push(...executionErrorData);
 					continue;
 				}
 
-				// Re-throw as NodeOperationError if not already
-				if (error instanceof NodeOperationError) {
+				if (error instanceof NodeOperationError || error instanceof NodeApiError) {
 					throw error;
 				}
 

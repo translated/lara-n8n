@@ -1,7 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { NodeOperationError } from 'n8n-workflow';
+import { NodeApiError, NodeOperationError } from 'n8n-workflow';
 import { executeTextTranslation } from '../../../nodes/LaraTranslate/executors/TextTranslationExecutor';
-import { LaraApiClient } from '../../../nodes/LaraTranslate/services/LaraApiClient';
+import {
+	LaraApiClient,
+	LaraApiHttpError,
+} from '../../../nodes/LaraTranslate/services/LaraApiClient';
 
 describe('executeTextTranslation', () => {
 	let mockContext: any;
@@ -102,13 +105,13 @@ describe('executeTextTranslation', () => {
 		expect(translateCall).toBeDefined();
 	});
 
-	it('throws NodeOperationError on API failure', async () => {
+	it('throws NodeOperationError on generic (non-HTTP) failure', async () => {
 		mockContext.getNodeParameter
 			.mockReturnValueOnce('Hello')
 			.mockReturnValueOnce({})
 			.mockReturnValueOnce({});
 
-		mockLara.translate.mockRejectedValueOnce(new Error('API rate limit exceeded'));
+		mockLara.translate.mockRejectedValueOnce(new Error('Unexpected failure'));
 
 		await expect(
 			executeTextTranslation(
@@ -119,6 +122,34 @@ describe('executeTextTranslation', () => {
 				'it',
 			),
 		).rejects.toThrow(NodeOperationError);
+	});
+
+	it('throws NodeApiError when LaraApiHttpError is raised', async () => {
+		mockContext.getNodeParameter
+			.mockReturnValueOnce('Hello')
+			.mockReturnValueOnce({})
+			.mockReturnValueOnce({});
+
+		const responseBody = { error: { type: 'RateLimit', message: 'Too many requests' } };
+		mockLara.translate.mockRejectedValueOnce(
+			new LaraApiHttpError({
+				statusCode: 429,
+				body: responseBody,
+				headers: { 'retry-after': '30' },
+				message: 'RateLimit: Too many requests',
+			}),
+		);
+
+		const error = await executeTextTranslation(
+			mockContext,
+			0,
+			mockLara as unknown as LaraApiClient,
+			'en',
+			'it',
+		).catch((e: unknown) => e);
+
+		expect(error).toBeInstanceOf(NodeApiError);
+		expect((error as NodeApiError).message).toContain('Too many requests');
 	});
 
 	it('includes error context in NodeOperationError message', async () => {
