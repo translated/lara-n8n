@@ -1,7 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { NodeOperationError } from 'n8n-workflow';
+import { NodeApiError, NodeOperationError } from 'n8n-workflow';
 import { executeDocumentTranslation } from '../../../nodes/LaraTranslate/executors/DocumentTranslationExecutor';
-import { LaraApiClient } from '../../../nodes/LaraTranslate/services/LaraApiClient';
+import {
+	LaraApiClient,
+	LaraApiHttpError,
+} from '../../../nodes/LaraTranslate/services/LaraApiClient';
 
 describe('executeDocumentTranslation', () => {
 	let mockContext: any;
@@ -202,7 +205,7 @@ describe('executeDocumentTranslation', () => {
 		).rejects.toThrow();
 	});
 
-	it('throws NodeOperationError on API failure', async () => {
+	it('throws NodeOperationError on generic (non-HTTP) failure', async () => {
 		mockContext.getNodeParameter
 			.mockReturnValueOnce('test.docx')
 			.mockReturnValueOnce('data')
@@ -221,6 +224,34 @@ describe('executeDocumentTranslation', () => {
 				'it',
 			),
 		).rejects.toThrow(NodeOperationError);
+	});
+
+	it('throws NodeApiError when LaraApiHttpError is raised', async () => {
+		mockContext.getNodeParameter
+			.mockReturnValueOnce('test.docx')
+			.mockReturnValueOnce('data')
+			.mockReturnValueOnce({})
+			.mockReturnValueOnce({});
+
+		const responseBody = { error: { type: 'PayloadTooLarge', message: 'File exceeds 50MB' } };
+		mockLara.translateDocument.mockRejectedValueOnce(
+			new LaraApiHttpError(413, responseBody, {}, 'PayloadTooLarge: File exceeds 50MB'),
+		);
+
+		try {
+			await executeDocumentTranslation(
+				mockContext,
+				0,
+				mockItems,
+				mockLara as unknown as LaraApiClient,
+				'en',
+				'it',
+			);
+			expect.fail('Should have thrown');
+		} catch (error) {
+			expect(error).toBeInstanceOf(NodeApiError);
+			expect((error as NodeApiError).message).toContain('File exceeds 50MB');
+		}
 	});
 
 	it('includes error context in NodeOperationError message', async () => {

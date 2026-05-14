@@ -4,6 +4,8 @@ import {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
+	JsonObject,
+	NodeApiError,
 	NodeConnectionType,
 	NodeOperationError,
 } from 'n8n-workflow';
@@ -20,6 +22,7 @@ import { validateLanguages } from './utils/validators';
 import { getErrorMessage } from './utils/utils';
 import { executeTextTranslation } from './executors/TextTranslationExecutor';
 import { executeDocumentTranslation } from './executors/DocumentTranslationExecutor';
+import { LaraApiHttpError } from './services/LaraApiClient';
 
 export class LaraTranslate implements INodeType {
 	description: INodeTypeDescription = {
@@ -173,9 +176,17 @@ export class LaraTranslate implements INodeType {
 					continue;
 				}
 
-				// Re-throw as NodeOperationError if not already
-				if (error instanceof NodeOperationError) {
+				// Already-wrapped n8n errors pass through unchanged
+				if (error instanceof NodeOperationError || error instanceof NodeApiError) {
 					throw error;
+				}
+
+				if (error instanceof LaraApiHttpError) {
+					throw new NodeApiError(this.getNode(), error as unknown as JsonObject, {
+						itemIndex: i,
+						message: error.message,
+						httpCode: String(error.statusCode),
+					});
 				}
 
 				throw new NodeOperationError(this.getNode(), error as Error, {

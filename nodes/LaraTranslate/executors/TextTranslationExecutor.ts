@@ -1,9 +1,15 @@
-import { IExecuteFunctions, INodeExecutionData, NodeOperationError } from 'n8n-workflow';
+import {
+	IExecuteFunctions,
+	INodeExecutionData,
+	JsonObject,
+	NodeApiError,
+	NodeOperationError,
+} from 'n8n-workflow';
 import { LaraTranslateAdditionalOptions } from '../types/types';
 import LaraTranslateServices from '../services/TranslateService';
 import { validateTextInput } from '../utils/validators';
 import { createLaraError } from '../utils/utils';
-import { LaraApiClient } from '../services/LaraApiClient';
+import { LaraApiClient, LaraApiHttpError } from '../services/LaraApiClient';
 
 /**
  * Executes text translation for a single item
@@ -54,6 +60,13 @@ export async function executeTextTranslation(
 			{ itemData: { item: itemIndex } },
 		);
 	} catch (error) {
+		if (error instanceof LaraApiHttpError) {
+			throw new NodeApiError(context.getNode(), error as unknown as JsonObject, {
+				itemIndex,
+				message: error.message,
+				httpCode: String(error.statusCode),
+			});
+		}
 		throw new NodeOperationError(context.getNode(), createLaraError(error, 'text translation'), {
 			itemIndex,
 		});

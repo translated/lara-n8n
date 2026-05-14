@@ -71,6 +71,24 @@ function buildMultipartBody(
 }
 
 /**
+ * Error thrown when the Lara API responds with a non-2xx HTTP status.
+ * Preserves the raw response so the executor boundary can hand it to NodeApiError,
+ * which exposes statusCode/body/headers in n8n's UI.
+ */
+export class LaraApiHttpError extends Error {
+	readonly name = 'LaraApiHttpError';
+
+	constructor(
+		readonly statusCode: number,
+		readonly body: unknown,
+		readonly headers: Record<string, unknown> | undefined,
+		message: string,
+	) {
+		super(message);
+	}
+}
+
+/**
  * HTTP client for the Lara Translate API.
  * Implements HMAC-SHA256 request signing (reverse-engineered from @translated/lara SDK).
  * Uses n8n's httpRequest helper for all HTTP calls.
@@ -165,6 +183,7 @@ export class LaraApiClient {
 
 		const statusCode = response.statusCode as number;
 		const responseBody = response.body;
+		const responseHeaders = response.headers as Record<string, unknown> | undefined;
 
 		if (statusCode >= 200 && statusCode < 300) {
 			return parseContent((responseBody as Record<string, any>)?.content);
@@ -172,11 +191,19 @@ export class LaraApiClient {
 
 		// Handle non-JSON or unexpected error responses (e.g. 502 from load balancer)
 		if (typeof responseBody !== 'object' || responseBody === null) {
-			throw new Error(`ApiError: HTTP ${statusCode} - ${String(responseBody || 'No response body')}`);
+			throw new LaraApiHttpError(
+				statusCode,
+				responseBody,
+				responseHeaders,
+				`ApiError: HTTP ${statusCode} - ${String(responseBody || 'No response body')}`,
+			);
 		}
 
 		const error = (responseBody as Record<string, any>).error || {};
-		throw new Error(
+		throw new LaraApiHttpError(
+			statusCode,
+			responseBody,
+			responseHeaders,
 			`${error.type || 'UnknownError'}: ${error.message || `HTTP ${statusCode}`}`,
 		);
 	}
