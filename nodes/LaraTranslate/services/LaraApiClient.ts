@@ -70,6 +70,29 @@ function buildMultipartBody(
 	return Buffer.concat(parts);
 }
 
+export interface LaraApiHttpErrorInit {
+	statusCode: number;
+	body: unknown;
+	headers: Record<string, unknown> | undefined;
+	message: string;
+}
+
+// Custom error type so LaraApiClient stays decoupled from n8n-workflow; the executor
+// boundary unwraps these into NodeApiError so n8n's UI can render the HTTP details.
+export class LaraApiHttpError extends Error {
+	readonly name = 'LaraApiHttpError';
+	readonly statusCode: number;
+	readonly body: unknown;
+	readonly headers: Record<string, unknown> | undefined;
+
+	constructor({ statusCode, body, headers, message }: LaraApiHttpErrorInit) {
+		super(message);
+		this.statusCode = statusCode;
+		this.body = body;
+		this.headers = headers;
+	}
+}
+
 /**
  * HTTP client for the Lara Translate API.
  * Implements HMAC-SHA256 request signing (reverse-engineered from @translated/lara SDK).
@@ -165,6 +188,7 @@ export class LaraApiClient {
 
 		const statusCode = response.statusCode as number;
 		const responseBody = response.body;
+		const responseHeaders = response.headers as Record<string, unknown> | undefined;
 
 		if (statusCode >= 200 && statusCode < 300) {
 			return parseContent((responseBody as Record<string, any>)?.content);
@@ -172,13 +196,21 @@ export class LaraApiClient {
 
 		// Handle non-JSON or unexpected error responses (e.g. 502 from load balancer)
 		if (typeof responseBody !== 'object' || responseBody === null) {
-			throw new Error(`ApiError: HTTP ${statusCode} - ${String(responseBody || 'No response body')}`);
+			throw new LaraApiHttpError({
+				statusCode,
+				body: responseBody,
+				headers: responseHeaders,
+				message: `ApiError: HTTP ${statusCode} - ${String(responseBody || 'No response body')}`,
+			});
 		}
 
 		const error = (responseBody as Record<string, any>).error || {};
-		throw new Error(
-			`${error.type || 'UnknownError'}: ${error.message || `HTTP ${statusCode}`}`,
-		);
+		throw new LaraApiHttpError({
+			statusCode,
+			body: responseBody,
+			headers: responseHeaders,
+			message: `${error.type || 'UnknownError'}: ${error.message || `HTTP ${statusCode}`}`,
+		});
 	}
 
 	/**
