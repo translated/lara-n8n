@@ -162,13 +162,13 @@ export class LaraApiClient {
 		const signature = this.sign(challenge);
 
 		const headers: Record<string, string> = {
+			...extraHeaders,
 			'X-HTTP-Method-Override': method,
 			'X-Lara-Date': date,
 			'Content-Type': contentType,
 			'X-Lara-Client': CLIENT_NAME,
 			'X-Lara-Client-Version': PACKAGE_VERSION,
 			Authorization: `Lara ${this.accessKeyId}:${signature}`,
-			...extraHeaders,
 		};
 
 		if (contentMd5) {
