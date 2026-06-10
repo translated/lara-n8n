@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { LaraApiClient, LaraApiHttpError } from '../../../nodes/LaraTranslate/services/LaraApiClient';
+import { CLIENT_NAME, PACKAGE_VERSION } from '../../../nodes/LaraTranslate/config/clientHeaders';
 
 describe('LaraApiClient', () => {
 	let client: LaraApiClient;
@@ -35,6 +36,8 @@ describe('LaraApiClient', () => {
 			expect(callArgs.headers['X-Lara-Date']).toBeDefined();
 			expect(callArgs.headers['Authorization']).toMatch(/^Lara test-key-id:.+$/);
 			expect(callArgs.headers['Content-MD5']).toBeDefined();
+			expect(callArgs.headers['X-Lara-Client']).toBe(CLIENT_NAME);
+			expect(callArgs.headers['X-Lara-Client-Version']).toBe(PACKAGE_VERSION);
 			expect(callArgs.body.q).toBe('Hello');
 			expect(callArgs.body.source).toBe('en');
 			expect(callArgs.body.target).toBe('it');
@@ -419,9 +422,11 @@ describe('LaraApiClient', () => {
 
 			await promise;
 
-			// Step 3 call should have X-No-Trace
+			// Step 3 call should have X-No-Trace plus the Lara client headers
 			const step3 = mockHttpRequest.mock.calls[2][0];
 			expect(step3.headers['X-No-Trace']).toBe('true');
+			expect(step3.headers['X-Lara-Client']).toBe(CLIENT_NAME);
+			expect(step3.headers['X-Lara-Client-Version']).toBe(PACKAGE_VERSION);
 		});
 	});
 

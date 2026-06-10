@@ -7,6 +7,7 @@ import {
 	IHttpRequestOptions,
 	INodeProperties,
 } from 'n8n-workflow';
+import { CLIENT_NAME, PACKAGE_VERSION } from '../nodes/LaraTranslate/config/clientHeaders';
 
 export class LaraTranslateApi implements ICredentialType {
 	name = 'laraTranslateApi';
@@ -73,6 +74,8 @@ export class LaraTranslateApi implements ICredentialType {
 
 		requestOptions.headers = {
 			...requestOptions.headers,
+			'X-Lara-Client': CLIENT_NAME,
+			'X-Lara-Client-Version': PACKAGE_VERSION,
 			'X-Lara-Date': date,
 			Authorization: `Lara ${accessKeyId}:${signature}`,
 		};
