@@ -88,6 +88,8 @@ describe('LaraTranslateApi credential class', () => {
 			expect(result.headers?.['X-Lara-Date']).toBeDefined();
 			expect(result.headers?.['X-HTTP-Method-Override']).toBe('GET');
 			expect(result.headers?.['Content-Type']).toBe('application/json');
+			expect(result.headers?.['X-Lara-Client']).toBe('n8n');
+			expect(result.headers?.['X-Lara-Client-Version']).toBeDefined();
 		});
 
 		it('should use GET as default logical method when no override header', async () => {

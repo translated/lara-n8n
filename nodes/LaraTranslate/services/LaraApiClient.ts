@@ -2,6 +2,7 @@ import { createHash, createHmac, randomBytes } from 'node:crypto';
 import { IHttpRequestOptions, sleep } from 'n8n-workflow';
 import { LaraTranslateAdditionalOptions, TextResult } from '../types/types';
 import { DocumentStatus } from '../types/enums';
+import { CLIENT_NAME, PACKAGE_VERSION } from '../config/clientHeaders';
 
 type HttpRequestFn = (options: IHttpRequestOptions) => Promise<any>;
 
@@ -164,6 +165,8 @@ export class LaraApiClient {
 			'X-HTTP-Method-Override': method,
 			'X-Lara-Date': date,
 			'Content-Type': contentType,
+			'X-Lara-Client': CLIENT_NAME,
+			'X-Lara-Client-Version': PACKAGE_VERSION,
 			Authorization: `Lara ${this.accessKeyId}:${signature}`,
 			...extraHeaders,
 		};
