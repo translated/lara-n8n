@@ -4,7 +4,13 @@ import { LaraTranslateAdditionalOptions, TextResult } from '../types/types';
 import { DocumentStatus } from '../types/enums';
 import { CLIENT_NAME, PACKAGE_VERSION } from '../config/clientHeaders';
 
-type HttpRequestFn = (options: IHttpRequestOptions) => Promise<any>;
+interface LaraHttpResponse {
+	statusCode: number;
+	body: unknown;
+	headers?: Record<string, unknown>;
+}
+
+type HttpRequestFn = (options: IHttpRequestOptions) => Promise<unknown>;
 
 const BASE_URL = 'https://api.laratranslate.com';
 const POLLING_INTERVAL_MS = 2000;
@@ -140,7 +146,7 @@ export class LaraApiClient {
 		path: string,
 		body?: Record<string, unknown>,
 		extraHeaders?: Record<string, string>,
-	): Promise<any> {
+	): Promise<unknown> {
 		const date = new Date().toUTCString();
 		const contentType = 'application/json';
 
@@ -148,7 +154,7 @@ export class LaraApiClient {
 		let cleanBody: Record<string, unknown> | undefined;
 		if (body) {
 			cleanBody = Object.fromEntries(
-				Object.entries(body).filter(([_, v]) => v !== undefined && v !== null),
+				Object.entries(body).filter(([, v]) => v !== undefined && v !== null),
 			);
 			if (Object.keys(cleanBody).length === 0) {
 				cleanBody = undefined;
@@ -179,7 +185,7 @@ export class LaraApiClient {
 			throw new Error('LaraApiClient: httpRequest not set. Call setHttpRequest() before making API calls.');
 		}
 
-		const response = await this.httpRequest({
+		const response = (await this.httpRequest({
 			url: `${BASE_URL}${path}`,
 			method: 'POST',
 			headers,
@@ -187,14 +193,12 @@ export class LaraApiClient {
 			returnFullResponse: true,
 			ignoreHttpStatusErrors: true,
 			json: true,
-		} as IHttpRequestOptions);
+		} as IHttpRequestOptions)) as LaraHttpResponse;
 
-		const statusCode = response.statusCode as number;
-		const responseBody = response.body;
-		const responseHeaders = response.headers as Record<string, unknown> | undefined;
+		const { statusCode, body: responseBody, headers: responseHeaders } = response;
 
 		if (statusCode >= 200 && statusCode < 300) {
-			return parseContent((responseBody as Record<string, any>)?.content);
+			return parseContent((responseBody as Record<string, unknown>)?.content);
 		}
 
 		// Handle non-JSON or unexpected error responses (e.g. 502 from load balancer)
@@ -207,7 +211,10 @@ export class LaraApiClient {
 			});
 		}
 
-		const error = (responseBody as Record<string, any>).error || {};
+		const error = ((responseBody as Record<string, unknown>).error ?? {}) as {
+			type?: string;
+			message?: string;
+		};
 		throw new LaraApiHttpError({
 			statusCode,
 			body: responseBody,

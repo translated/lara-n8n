@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-lara-translate",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "n8n community node for translating text and documents with Lara Translate API",
   "keywords": [
     "n8n-community-node-package",
@@ -24,13 +24,14 @@
   "scripts": {
     "build": "npx rimraf dist && tsc && gulp build:icons",
     "dev": "tsc --watch",
+    "check:version": "bash scripts/check-version.sh",
     "format": "prettier nodes credentials --write",
-    "lint": "eslint nodes credentials package.json",
-    "lintfix": "eslint nodes credentials package.json --fix",
+    "lint": "n8n-node lint",
+    "lintfix": "n8n-node lint --fix",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "prepublishOnly": "pnpm run build && npx eslint -c .eslintrc.prepublish.js nodes credentials package.json"
+    "prepublishOnly": "pnpm run check:version && pnpm run build && n8n-node lint"
   },
   "files": [
     "dist"
@@ -45,14 +46,13 @@
     ]
   },
   "devDependencies": {
+    "@n8n/node-cli": "^0.34.0",
     "@types/node": "^25.2.3",
-    "@typescript-eslint/parser": "~8.59.0",
     "@vitest/coverage-v8": "^3.2.6",
-    "eslint": "^8.57.0",
-    "eslint-plugin-n8n-nodes-base": "^1.16.3",
+    "eslint": "^9.29.0",
     "gulp": "^5.0.0",
     "link": "^2.1.1",
-    "n8n-workflow": "*",
+    "n8n-workflow": "^2.16.0",
     "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
     "typescript": "5.8.3",

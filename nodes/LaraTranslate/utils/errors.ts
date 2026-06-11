@@ -7,11 +7,16 @@ export function wrapLaraHttpError(
 	itemIndex: number,
 	error: LaraApiHttpError,
 ): NodeApiError {
-	return new NodeApiError(node, error as unknown as JsonObject, {
+	const nodeError = new NodeApiError(node, error as unknown as JsonObject, {
 		itemIndex,
 		message: error.message,
 		httpCode: String(error.statusCode),
 	});
+	// n8n-workflow v2's NodeApiError no longer preserves the source error as
+	// `cause`, so attach it explicitly. buildContinueOnFailJson relies on it to
+	// recover the HTTP context (statusCode/body/headers) in continueOnFail mode.
+	(nodeError as { cause?: unknown }).cause = error;
+	return nodeError;
 }
 
 function findLaraApiHttpError(error: unknown): LaraApiHttpError | undefined {

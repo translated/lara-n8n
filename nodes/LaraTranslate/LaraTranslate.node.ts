@@ -5,7 +5,7 @@ import {
 	INodeType,
 	INodeTypeDescription,
 	NodeApiError,
-	NodeConnectionType,
+	NodeConnectionTypes,
 	NodeOperationError,
 } from 'n8n-workflow';
 
@@ -34,8 +34,8 @@ export class LaraTranslate implements INodeType {
 		defaults: {
 			name: 'Lara Translate',
 		},
-		inputs: [NodeConnectionType.Main],
-		outputs: [NodeConnectionType.Main],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		usableAsTool: true,
 		credentials: [
 			{
@@ -77,7 +77,7 @@ export class LaraTranslate implements INodeType {
 						name: g.name,
 						value: g.id,
 					}));
-				} catch (error) {
+				} catch {
 					return [
 						{
 							name: 'Error Loading Glossaries - Check Credentials',
@@ -97,7 +97,7 @@ export class LaraTranslate implements INodeType {
 						name: m.name,
 						value: m.id,
 					}));
-				} catch (error) {
+				} catch {
 					return [
 						{
 							name: 'Error Loading Memories - Check Credentials',
@@ -175,6 +175,8 @@ export class LaraTranslate implements INodeType {
 				}
 
 				if (error instanceof NodeOperationError || error instanceof NodeApiError) {
+					// Already an n8n error carrying full context; rethrow as-is.
+					// eslint-disable-next-line @n8n/community-nodes/require-node-api-error
 					throw error;
 				}
 
