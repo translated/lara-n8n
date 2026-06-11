@@ -104,7 +104,7 @@ class LaraTranslateServices {
 		const { lara, fileBuffer, documentName, options, source, target } = data;
 
 		const translateOptions = OptionsProcessor.process(options);
-		let extension = getFileExtension(documentName);
+		const extension = getFileExtension(documentName);
 
 		const translationPlain = await lara.translateDocument(
 			fileBuffer,

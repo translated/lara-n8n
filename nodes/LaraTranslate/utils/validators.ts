@@ -1,3 +1,4 @@
+import { IBinaryData } from 'n8n-workflow';
 import LaraTranslateServices from '../services/TranslateService';
 import { LARA_CONFIG } from '../config/config';
 import { getFileExtension } from './utils';
@@ -48,7 +49,10 @@ export function validateDocumentInputs(documentName: string): void {
  * @param binaryPropertyName - The name of the binary property
  * @throws Error if binary data is missing or invalid
  */
-export function validateBinaryInput(binaryData: any, binaryPropertyName: string): void {
+export function validateBinaryInput(
+	binaryData: IBinaryData | undefined,
+	binaryPropertyName: string,
+): void {
 	if (!binaryData) {
 		throw new Error(`No binary data found in property '${binaryPropertyName}'`);
 	}

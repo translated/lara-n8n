@@ -4,7 +4,7 @@ import { resolve } from 'path';
 export default defineConfig({
 	resolve: {
 		alias: {
-			'n8n-workflow': resolve(__dirname, 'node_modules/n8n-workflow/dist/index.js'),
+			'n8n-workflow': resolve(__dirname, 'node_modules/n8n-workflow/dist/cjs/index.js'),
 		},
 	},
 	test: {
