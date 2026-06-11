@@ -24,13 +24,14 @@
   "scripts": {
     "build": "npx rimraf dist && tsc && gulp build:icons",
     "dev": "tsc --watch",
+    "check:version": "bash scripts/check-version.sh",
     "format": "prettier nodes credentials --write",
     "lint": "n8n-node lint",
     "lintfix": "n8n-node lint --fix",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "prepublishOnly": "pnpm run build && n8n-node lint"
+    "prepublishOnly": "pnpm run check:version && pnpm run build && n8n-node lint"
   },
   "files": [
     "dist"
