@@ -63,8 +63,12 @@ jobs:
             exit 1
           fi
       
+      # prepublishOnly rebuilds and then bakes METRICS_URL / METRICS_API_KEY into
+      # dist/. Baking earlier would be erased by that rebuild.
       - name: Publish to npm
         run: pnpm publish --access public --no-git-checks --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          METRICS_URL: ${{ secrets.METRICS_URL }}
+          METRICS_API_KEY: ${{ secrets.METRICS_API_KEY }}
 
