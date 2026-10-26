@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { LaraApiClient, LaraApiHttpError } from '../../../nodes/LaraTranslate/services/LaraApiClient';
 import { CLIENT_NAME, PACKAGE_VERSION } from '../../../nodes/LaraTranslate/config/clientHeaders';
+import { createHash } from 'node:crypto';
+import { ACCOUNT_ID, laraToken } from '../../helpers/lara';
 
 describe('LaraApiClient', () => {
 	let client: LaraApiClient;
@@ -501,6 +503,84 @@ describe('LaraApiClient', () => {
 			await expect(
 				freshClient.listMemories(),
 			).rejects.toThrow('LaraApiClient: httpRequest not set');
+		});
+	});
+
+	describe('getAccountId()', () => {
+		it('signs /v2/auth without the key id and returns the account id claim', async () => {
+			const freshClient = new LaraApiClient('account-key-a', 'test-key-secret');
+			const http = vi.fn().mockResolvedValueOnce({
+				statusCode: 200,
+				body: { token: laraToken() },
+			});
+			freshClient.setHttpRequest(http);
+
+			await expect(freshClient.getAccountId()).resolves.toBe(ACCOUNT_ID);
+
+			const callArgs = http.mock.calls[0][0];
+			expect(callArgs.url).toBe('https://api.laratranslate.com/v2/auth');
+			expect(callArgs.method).toBe('POST');
+			expect(callArgs.body).toEqual({ id: 'account-key-a' });
+			// Unlike every other Lara call, this one carries no key id.
+			expect(callArgs.headers.Authorization).toMatch(/^Lara:[^:]+$/);
+			expect(callArgs.headers['Content-MD5']).toBe(
+				createHash('md5').update(JSON.stringify({ id: 'account-key-a' })).digest('base64'),
+			);
+			expect(callArgs.headers['X-Lara-Client']).toBe(CLIENT_NAME);
+			expect(callArgs.headers['X-Lara-Client-Version']).toBe(PACKAGE_VERSION);
+			expect(callArgs.ignoreHttpStatusErrors).toBe(true);
+		});
+
+		it('caches the account id across clients using the same key', async () => {
+			const first = new LaraApiClient('account-key-b', 'test-key-secret');
+			const http = vi
+				.fn()
+				.mockResolvedValueOnce({ statusCode: 200, body: { token: laraToken({ id: 'acc_cached' }) } });
+			first.setHttpRequest(http);
+			await first.getAccountId();
+
+			const second = new LaraApiClient('account-key-b', 'test-key-secret');
+			const secondHttp = vi.fn();
+			second.setHttpRequest(secondHttp);
+
+			await expect(second.getAccountId()).resolves.toBe('acc_cached');
+			expect(secondHttp).not.toHaveBeenCalled();
+		});
+
+		it('returns undefined when the key is rejected', async () => {
+			const freshClient = new LaraApiClient('account-key-c', 'test-key-secret');
+			freshClient.setHttpRequest(
+				vi.fn().mockResolvedValueOnce({ statusCode: 401, body: { message: 'nope' } }),
+			);
+
+			await expect(freshClient.getAccountId()).resolves.toBeUndefined();
+		});
+
+		it('returns undefined for a malformed token or a foreign id', async () => {
+			const malformed = new LaraApiClient('account-key-d', 'test-key-secret');
+			malformed.setHttpRequest(
+				vi.fn().mockResolvedValueOnce({ statusCode: 200, body: { token: 'not-a-jwt' } }),
+			);
+			await expect(malformed.getAccountId()).resolves.toBeUndefined();
+
+			const foreign = new LaraApiClient('account-key-e', 'test-key-secret');
+			foreign.setHttpRequest(
+				vi.fn().mockResolvedValueOnce({ statusCode: 200, body: { token: laraToken({ id: 'usr_1' }) } }),
+			);
+			await expect(foreign.getAccountId()).resolves.toBeUndefined();
+		});
+
+		it('returns undefined when the request throws', async () => {
+			const freshClient = new LaraApiClient('account-key-f', 'test-key-secret');
+			freshClient.setHttpRequest(vi.fn().mockRejectedValueOnce(new Error('ECONNREFUSED')));
+
+			await expect(freshClient.getAccountId()).resolves.toBeUndefined();
+		});
+
+		it('returns undefined without setHttpRequest()', async () => {
+			const freshClient = new LaraApiClient('account-key-g', 'test-key-secret');
+
+			await expect(freshClient.getAccountId()).resolves.toBeUndefined();
 		});
 	});
 });

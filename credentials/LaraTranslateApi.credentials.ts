@@ -34,6 +34,14 @@ export class LaraTranslateApi implements ICredentialType {
 			},
 			description: 'Your Lara Translate API access key secret',
 		},
+		{
+			displayName: 'Send Anonymous Usage Metrics',
+			name: 'sendUsageMetrics',
+			type: 'boolean',
+			default: true,
+			description:
+				'Whether to send anonymous usage events (operation, outcome, latency, character count) to Lara. Never includes translated text or file content.',
+		},
 	];
 
 	test: ICredentialTestRequest = {
@@ -56,8 +64,7 @@ export class LaraTranslateApi implements ICredentialType {
 		const accessKeySecret = credentials.accessKeySecret as string;
 
 		const date = new Date().toUTCString();
-		const contentType =
-			(requestOptions.headers?.['Content-Type'] as string) || 'application/json';
+		const contentType = (requestOptions.headers?.['Content-Type'] as string) || 'application/json';
 
 		// Lara API infra doesn't support all HTTP methods; actual method rides in this header
 		const logicalMethod =
@@ -68,9 +75,7 @@ export class LaraTranslateApi implements ICredentialType {
 		const path = requestOptions.url;
 		// Content-MD5 is empty for bodiless requests; body signing is handled by LaraApiClient
 		const challenge = `${logicalMethod}\n${path}\n\n${contentType}\n${date}`;
-		const signature = createHmac('sha256', accessKeySecret)
-			.update(challenge)
-			.digest('base64');
+		const signature = createHmac('sha256', accessKeySecret).update(challenge).digest('base64');
 
 		requestOptions.headers = {
 			...requestOptions.headers,

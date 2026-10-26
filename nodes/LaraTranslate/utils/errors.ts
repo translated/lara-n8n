@@ -19,7 +19,7 @@ export function wrapLaraHttpError(
 	return nodeError;
 }
 
-function findLaraApiHttpError(error: unknown): LaraApiHttpError | undefined {
+export function findLaraApiHttpError(error: unknown): LaraApiHttpError | undefined {
 	if (error instanceof LaraApiHttpError) return error;
 	const cause = (error as { cause?: unknown } | null)?.cause;
 	if (cause instanceof LaraApiHttpError) return cause;

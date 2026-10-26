@@ -18,6 +18,7 @@ Official n8n community node for [Lara Translate](https://laratranslate.com), ena
 - [Installation](#installation)
 - [Quick Start](#quick-start)
 - [Documentation](#documentation)
+- [Usage Metrics](#usage-metrics)
 - [Resources](#resources)
 
 ## Requirements
@@ -76,6 +77,7 @@ The first time you use the node, you need to configure your credentials:
 2. Enter your credentials:
     - **Access Key ID**: your public key
     - **Access Key Secret**: your secret key
+    - **Send Anonymous Usage Metrics**: leave on to help improve the integration, or turn it off (see [Usage Metrics](#usage-metrics))
 3. Click **Save** to save the credentials
 
 ### Step 3: Choose What to Translate
@@ -158,6 +160,28 @@ Follow this recommended reading path:
 - [API Credentials Setup](docs/config/api-credentials.md) - Detailed guide for obtaining API keys
 - [Supported Languages](docs/config/supported-languages.md) - 200+ supported languages
 - [Supported File Formats](docs/config/supported-formats.md) - Document format specifications
+
+## Usage Metrics
+
+The node reports anonymous usage events to Lara so the integration can be
+measured and improved. **No translated text and no file content ever leaves your
+n8n instance as part of these events.**
+
+What is sent:
+
+| Event | When |
+| --- | --- |
+| `install` | first execution after the node is loaded |
+| `auth_success` / `auth_fail` | the first time your API key is accepted or rejected |
+| `call_success` / `call_error` | each translation, with its outcome |
+
+Each event carries the Lara account id tied to your API key, the node version,
+the n8n execution id, how long the call took, whether it was a text or document
+translation, the source and target language codes, and — for text translations
+only — the number of characters submitted. Items translated with **No Trace
+(Incognito Mode)** do not report a character count.
+
+To turn it off, set **Send Anonymous Usage Metrics** to off in the credential.
 
 ## Resources
 

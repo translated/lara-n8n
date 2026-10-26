@@ -54,7 +54,7 @@ describe('executeTextTranslation', () => {
 			'it',
 		);
 
-		expect(result).toEqual([
+		expect(result.data).toEqual([
 			{
 				json: {
 					translation: 'Ciao',
@@ -63,6 +63,24 @@ describe('executeTextTranslation', () => {
 				},
 			},
 		]);
+		expect(result.charsTranslated).toBe('Hello'.length);
+	});
+
+	it('omits the character count in incognito mode', async () => {
+		mockContext.getNodeParameter
+			.mockReturnValueOnce('Hello')
+			.mockReturnValueOnce({ noTrace: true })
+			.mockReturnValueOnce({});
+
+		const result = await executeTextTranslation(
+			mockContext,
+			0,
+			mockLara as unknown as LaraApiClient,
+			'en',
+			'it',
+		);
+
+		expect(result.charsTranslated).toBeUndefined();
 	});
 
 	it('calls constructExecutionMetaData with correct itemData', async () => {

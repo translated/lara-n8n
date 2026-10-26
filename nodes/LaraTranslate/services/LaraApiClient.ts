@@ -13,8 +13,31 @@ interface LaraHttpResponse {
 type HttpRequestFn = (options: IHttpRequestOptions) => Promise<unknown>;
 
 const BASE_URL = 'https://api.laratranslate.com';
+const AUTH_PATH = '/v2/auth';
+// The account id only labels metrics, and the lookup runs while the workflow
+// waits on the metrics flush: never let it outlast the flush's own budget.
+const AUTH_TIMEOUT_MS = 2000;
 const POLLING_INTERVAL_MS = 2000;
 const MAX_POLL_TIME_MS = 1000 * 60 * 15; // 15 minutes
+
+// The account id never changes for an access key, so one /v2/auth round trip per
+// key per process is enough. Only successes are cached: a transient failure must
+// be retried on the next execution.
+const accountIdCache = new Map<string, string>();
+
+/**
+ * Reads the `id` claim (`acc_...`) out of a Lara JWT. The signature is not
+ * verified — the token came from an authenticated response and the id is only
+ * used to label usage metrics.
+ */
+function accountIdFromToken(token: string): string | undefined {
+	const payload = token.split('.')[1];
+	if (!payload) return undefined;
+	const decoded = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8')) as {
+		id?: unknown;
+	};
+	return typeof decoded.id === 'string' && decoded.id.startsWith('acc_') ? decoded.id : undefined;
+}
 
 /**
  * Recursively converts snake_case keys to camelCase.
@@ -182,7 +205,9 @@ export class LaraApiClient {
 		}
 
 		if (!this.httpRequest) {
-			throw new Error('LaraApiClient: httpRequest not set. Call setHttpRequest() before making API calls.');
+			throw new Error(
+				'LaraApiClient: httpRequest not set. Call setHttpRequest() before making API calls.',
+			);
 		}
 
 		const response = (await this.httpRequest({
@@ -325,13 +350,9 @@ export class LaraApiClient {
 		while (Date.now() - start < MAX_POLL_TIME_MS) {
 			if (currentStatus === DocumentStatus.TRANSLATED) {
 				// Step 5: Get download URL
-				const downloadInfo = (await this.request(
-					'GET',
-					`/documents/${documentId}/download-url`,
-					{
-						output_format: options.outputFormat,
-					},
-				)) as { url: string };
+				const downloadInfo = (await this.request('GET', `/documents/${documentId}/download-url`, {
+					output_format: options.outputFormat,
+				})) as { url: string };
 
 				// Step 6: Download translated file from S3
 				return (await this.httpRequest({
@@ -356,6 +377,69 @@ export class LaraApiClient {
 		}
 
 		throw new Error(`TimeoutError: Document ${documentId} translation timed out after 15 minutes`);
+	}
+
+	/**
+	 * Resolves the Lara account id (`acc_...`) for the configured access key.
+	 *
+	 * This node signs every request itself instead of using the SDK, so no JWT is
+	 * lying around to read the id from; /v2/auth is the endpoint that mints one.
+	 * Its contract differs from every other Lara call in two ways — the
+	 * Authorization header carries no key id (the id travels in the body), and the
+	 * response is not wrapped in `content` — so it gets its own method rather than
+	 * a flag on request().
+	 *
+	 * Returns undefined on any failure: the account id only labels metrics.
+	 */
+	async getAccountId(): Promise<string | undefined> {
+		const cacheKey = createHash('sha256').update(this.accessKeyId).digest('hex');
+		const cached = accountIdCache.get(cacheKey);
+		// The empty string marks a key the API has definitively rejected, so a
+		// broken key does not pay a round trip on every execution forever.
+		if (cached !== undefined) return cached || undefined;
+		if (!this.httpRequest) return undefined;
+
+		try {
+			const body = { id: this.accessKeyId };
+			const date = new Date().toUTCString();
+			const contentType = 'application/json';
+			const contentMd5 = createHash('md5').update(JSON.stringify(body)).digest('base64');
+			const challenge = `POST\n${AUTH_PATH}\n${contentMd5}\n${contentType}\n${date}`;
+
+			const response = (await this.httpRequest({
+				url: `${BASE_URL}${AUTH_PATH}`,
+				method: 'POST',
+				headers: {
+					'Content-Type': contentType,
+					'Content-MD5': contentMd5,
+					'X-Lara-Date': date,
+					'X-Lara-Client': CLIENT_NAME,
+					'X-Lara-Client-Version': PACKAGE_VERSION,
+					Authorization: `Lara:${this.sign(challenge)}`,
+				},
+				body,
+				returnFullResponse: true,
+				ignoreHttpStatusErrors: true,
+				json: true,
+				timeout: AUTH_TIMEOUT_MS,
+			} as IHttpRequestOptions)) as LaraHttpResponse;
+
+			if (response.statusCode < 200 || response.statusCode >= 300) {
+				// A 4xx is a verdict on the key itself; 5xx and timeouts are not.
+				if (response.statusCode < 500) accountIdCache.set(cacheKey, '');
+				return undefined;
+			}
+
+			const token = (response.body as { token?: unknown } | null)?.token;
+			if (typeof token !== 'string') return undefined;
+
+			const accountId = accountIdFromToken(token);
+			if (accountId) accountIdCache.set(cacheKey, accountId);
+			return accountId;
+		} catch {
+			// Optional data: a failure here just means fewer metrics, never an error.
+			return undefined;
+		}
 	}
 
 	/**

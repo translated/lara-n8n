@@ -31,7 +31,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "prepublishOnly": "pnpm run check:version && pnpm run build && n8n-node lint"
+    "prepublishOnly": "pnpm run check:version && pnpm run build && n8n-node lint && bash scripts/bake-metrics.sh"
   },
   "files": [
     "dist"

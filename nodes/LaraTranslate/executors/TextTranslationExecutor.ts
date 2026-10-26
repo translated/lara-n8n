@@ -6,6 +6,16 @@ import { createLaraError } from '../utils/utils';
 import { wrapLaraHttpError } from '../utils/errors';
 import { LaraApiClient, LaraApiHttpError } from '../services/LaraApiClient';
 
+export interface TextTranslationResult {
+	data: INodeExecutionData[];
+	/**
+	 * Characters submitted for translation, for usage metrics. Absent in
+	 * incognito mode: asking Lara not to retain the content and then counting its
+	 * characters would go against that expectation.
+	 */
+	charsTranslated?: number;
+}
+
 /**
  * Executes text translation for a single item
  * Handles parameter extraction, validation, translation, and response formatting
@@ -16,7 +26,7 @@ export async function executeTextTranslation(
 	lara: LaraApiClient,
 	source: string,
 	target: string,
-): Promise<INodeExecutionData[]> {
+): Promise<TextTranslationResult> {
 	const text = context.getNodeParameter('text', itemIndex) as string;
 	validateTextInput(text);
 
@@ -46,14 +56,17 @@ export async function executeTextTranslation(
 			options,
 		});
 
-		return context.helpers.constructExecutionMetaData(
-			[
-				{
-					json: { ...response },
-				},
-			],
-			{ itemData: { item: itemIndex } },
-		);
+		return {
+			data: context.helpers.constructExecutionMetaData(
+				[
+					{
+						json: { ...response },
+					},
+				],
+				{ itemData: { item: itemIndex } },
+			),
+			charsTranslated: options.noTrace ? undefined : text.length,
+		};
 	} catch (error) {
 		if (error instanceof LaraApiHttpError) {
 			throw wrapLaraHttpError(context.getNode(), itemIndex, error);
